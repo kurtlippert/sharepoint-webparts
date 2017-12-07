@@ -1,6 +1,6 @@
-import * as React from 'react';
-import * as ReactDom from 'react-dom';
-import { Version } from '@microsoft/sp-core-library';
+import * as React from 'react'
+import * as ReactDom from 'react-dom'
+import { Version } from '@microsoft/sp-core-library'
 import {
   BaseClientSideWebPart,
   IPropertyPaneConfiguration,
@@ -8,39 +8,44 @@ import {
   PropertyPaneCheckbox,
   PropertyPaneDropdown,
   PropertyPaneToggle
-} from '@microsoft/sp-webpart-base';
+} from '@microsoft/sp-webpart-base'
+import PageContext from '@microsoft/sp-page-context/lib/PageContext'
 
-import * as strings from 'HelloWorldWebPartStrings';
-import HelloWorld from './components/HelloWorld';
-import { IHelloWorldProps } from './components/IHelloWorldProps';
+import * as strings from 'HelloWorldWebPartStrings'
+import MockHttpClient from './MockHttpClient'
 
-export interface IHelloWorldWebPartProps {
-  description: string;
-  test: string;
-  test1: boolean;
-  test2: string;
-  test3: boolean;
+import IHelloWorldWebPartProps from './components/IHelloWorldWebPartProps'
+import HelloWorld from './components/HelloWorld'
+
+export interface ISPLists {
+  value: ISPList[]
+}
+
+export interface ISPList {
+  Title: string
+  Id: string
 }
 
 export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorldWebPartProps> {
 
   public render(): void {
-    const element: React.ReactElement<IHelloWorldProps > = React.createElement(
+    const element: React.ReactElement<IHelloWorldWebPartProps> = React.createElement(
       HelloWorld,
       {
         description: this.properties.description,
         test: this.properties.test,
         test1: this.properties.test1,
         test2: this.properties.test2,
-        test3: this.properties.test3
+        test3: this.properties.test3,
+        pageContext: this.context.pageContext
       }
-    );
+    )
 
-    ReactDom.render(element, this.domElement);
+    ReactDom.render(element, this.domElement)
   }
 
   protected get dataVersion(): Version {
-    return Version.parse('1.0');
+    return Version.parse('1.0')
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -83,6 +88,6 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<IHelloWorld
           ]
         }
       ]
-    };
+    }
   }
 }
