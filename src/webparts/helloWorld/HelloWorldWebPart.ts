@@ -22,7 +22,7 @@ import { escape } from '@microsoft/sp-lodash-subset'
 
 import * as strings from 'HelloWorldWebPartStrings'
 import MockHttpClient from './MockHttpClient'
-// import { from, Stream } from 'most';
+import { from, Stream, empty } from 'most';
 
 import IHelloWorldWebPartProps from './IHelloWorldWebPartProps'
 import styles from '../../Layout.module.scss'
@@ -41,21 +41,42 @@ export interface ISPList {
   Id: string
 }
 
-const getMockListData: Promise<ISPList[]> = MockHttpClient
+// const getMockListData: Promise<ISPLists> = 
+//   MockHttpClient.then((response: ISPList[]) => ({ value: response }))
 
-const getListData: Promise<ISPLists> = 
-  this.context.spHttpClient.get(
-    `${this.context.pageContext.web.absoluteUrl}/_api/web/lists?$filter=Hidden eq false`,
-    SPHttpClient.configurations.v1
-  ).then((response: SPHttpClientResponse) => response.json)
-  // from(this.context.spHttpClient.get(
-  //   `${this.context.pageContext.web.absoluteUrl}/_api/web/lists?$filter=Hidden eq false`,
-  //   SPHttpClient.configurations.v1
-  // ))
+// const getMockListData = (ispList: ISPList) =>
+//   Promise.resolve(ispList)
 
-const renderListAsync = () =>
-  Environment.type === EnvironmentType.Local
-    ? renderList(getMockListData)
+// const fetchContent: Promise<ISPList> = (url: string) =>
+//   // Promise.resolve(url)
+//   this.context.spHttpClient.get(
+//     `${this.context.pageContext.web.absoluteUrl}/_api/web/lists?$filter=Hidden eq false`,
+//     SPHttpClient.configurations.v1
+//   )
+
+// const streamOfPromises = (url: string) =>
+//   from(url).map(fetchContent)
+
+const spUrl = `${this.context.pageContext.web.absoluteUrl}/_api/web/lists?$filter=Hidden eq false`
+
+const getMockListData: Promise<ISPLists> = MockHttpClient.then((response) => ({ value: response }))
+
+const getListData = (url: string): Promise<ISPLists> =>
+  this.context.spHttpClient.get(url, SPHttpClient.configurations.v1)
+// .then((response: SPHttpClientResponse) => response.json)
+
+const mockListData = from([]).map(getMockListData)
+const listData = from(spUrl).map(getListData)
+
+const renderListAsync = () => {
+  switch (Environment.type) {
+    case EnvironmentType.Local:
+      getMockListData.then((response) => renderList(response.value)); break
+    case EnvironmentType.SharePoint:
+    case EnvironmentType.ClassicSharePoint:
+      getListData.then((response) => renderList(response.value)); break
+  }
+}
 
 const listStyle = style(
   margin(10),
@@ -91,7 +112,7 @@ const listItemStyle = style(
 
 const r = React.createElement
 
-const renderList = (items: Stream<ISPList>) =>
+const renderList = (items: ISPList[]) =>
   items.map(item => 
     r('ul', { className: listStyle }, [
       r('li', { className: listItemStyle }, [
