@@ -26,8 +26,10 @@
     "csstips": "^0.2.2",
     "csx": "^8.5.0",
     "most": "1.7.2",
+    "office-ui-fabric-react": "^5.30.2",
     "react": "15.4.2",
     "react-dom": "15.4.2",
+    "react-redux": "^5.0.6",
     "typestyle": "^1.5.1"
   },
   "devDependencies": {
