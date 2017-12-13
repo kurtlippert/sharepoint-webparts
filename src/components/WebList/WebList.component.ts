@@ -19,17 +19,18 @@ export function renderList(items: ISPList[], selector: string): void {
   listContainer.innerHTML = html
 }
 
-const mapStateToProps = (state) => ({
-  ispItems = 
-})
+// const mapStateToProps = (state) => ({
+//   ispItems = 
+// })
 
-const WebList = ({ ispItems }) =>
-  ispItems.map((ispItem: ISPList) =>
-    r('ul', { className: listStyle }, [
-      r('li', { className: listItemStyle }, [
-        r('span', { className: 'ms-font-l' }, ispItem.Title)
-      ])
-    ]))
+const WebList = () =>
+  r('div', {}, 'Web List will go here')
+  // ispItems.map((ispItem: ISPList) =>
+  //   r('ul', { className: listStyle }, [
+  //     r('li', { className: listItemStyle }, [
+  //       r('span', { className: 'ms-font-l' }, ispItem.Title)
+  //     ])
+  //   ]))
   // r('div', { id: 'spListContainer' })
 
 export default WebList
