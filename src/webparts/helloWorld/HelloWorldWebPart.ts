@@ -1,11 +1,11 @@
-import * as React from 'react'
-import { createElement as r } from 'react'
-import * as ReactDom from 'react-dom'
+import * as React from 'react';
+import { createElement as r } from 'react';
+import * as ReactDom from 'react-dom';
 import { 
-  Version,
-  Environment,
-  EnvironmentType
-} from '@microsoft/sp-core-library'
+  Version
+  // Environment,
+  // EnvironmentType
+} from '@microsoft/sp-core-library';
 import {
   BaseClientSideWebPart,
   IPropertyPaneConfiguration,
@@ -14,30 +14,37 @@ import {
   PropertyPaneDropdown,
   PropertyPaneToggle,
   WebPartContext
-} from '@microsoft/sp-webpart-base'
-import PageContext from '@microsoft/sp-page-context/lib/PageContext'
+} from '@microsoft/sp-webpart-base';
+// import PageContext from '@microsoft/sp-page-context/lib/PageContext';
 import {
-  SPHttpClient,
-  SPHttpClientResponse   
+  // SPHttpClient,
+  // SPHttpClientResponse   
 } from '@microsoft/sp-http';
 
-import * as strings from 'HelloWorldWebPartStrings'
-import DefaultContainer from '../../containers/DefaultContainer'
-import { createStore, IState } from '../../store'
+import * as strings from 'HelloWorldWebPartStrings';
+import DefaultContainer from '../../containers/DefaultContainer';
+// import { createStore, IState } from '../../store';
 // import { applyProperties, updateProperty } from '../../reducers/webpart'
-import { Store } from 'redux'
-import { Provider } from 'react-redux'
+// import { Store } from 'redux';
+// import { Provider } from 'react-redux';
 // import IHelloWorldWebPartProps from '../../../lib/webparts/helloWorld/IHelloWorldWebPartProps';
 // import IHelloWorldWebPartProps from '../../../lib/webparts/helloWorld/IHelloWorldWebPartProps';
 // import IExampleProps from '../../components/Example/Example.props';
 
 export interface HelloWorldWebPartProps {
-  description: string
-  test: string
-  test1: boolean
-  test2: string
-  test3: boolean
-  context: WebPartContext
+  description: string;
+  test: string;
+  test1: boolean;
+  test2: string;
+  test3: boolean;
+  context: WebPartContext;
+}
+
+export type HelloWorldState = HelloWorldPropValue[];
+
+export interface HelloWorldPropValue {
+  id: number;
+  value: string | boolean;
 }
 
 export enum HelloWorldActionType {
@@ -49,33 +56,49 @@ export enum HelloWorldActionType {
 }
 
 export interface HelloWorldAction {
-  type: HelloWorldActionType
-  id: number
-  text: string
+  id: number;
+  type: HelloWorldActionType;
+  value: string | boolean;
 }
 
-const helloWorldReducer = (state: HelloWorldWebPartProps, action: HelloWorldAction) => {
+const helloWorldReducer = (state: HelloWorldState, action: HelloWorldAction): HelloWorldState => {
   switch (action.type) {
     case HelloWorldActionType.UPDATE_DESCRIPTION:
-      return {
+    case HelloWorldActionType.UPDATE_TEST:
+    case HelloWorldActionType.UPDATE_TEST2:
+      return [
         ...state,
-
-      }
+        {
+          id: action.id,
+          value: action.value as string
+        }
+      ];
+    case HelloWorldActionType.UPDATE_TEST1:
+    case HelloWorldActionType.UPDATE_TEST3:
+      return [
+        ...state,
+        {
+          id: action.id,
+          value: action.value as boolean
+        }
+      ];
+    default:
+      return state;
   }
-}
+};
 
 export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldWebPartProps> {
   // Define redux store
-  private store: Store<IState>
+  // private store: Store<IState>
 
-  // // initialize store when webpart is constructed
-  public constructor(context: WebPartContext) {
-    super()
-    this.store = createStore()
-  }
+  // // // initialize store when webpart is constructed
+  // public constructor(context: WebPartContext) {
+  //   super()
+  //   this.store = createStore()
+  // }
 
   public render(): void {
-    if (this.renderedOnce) { return }
+    if (this.renderedOnce) { return; }
 
     // const root: React.ReactElement<IHelloWorldWebPartProps> = 
     //   React.createElement(
@@ -87,8 +110,8 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
     //     }
     //   )
 
-    const root: React.ReactElement<IHelloWorldWebPartProps> = 
-      r(Provider, { store: this.store })
+    const root: React.ReactElement<HelloWorldWebPartProps> = 
+      // r(Provider, { store: this.store })
       r(DefaultContainer,
         {
           description: this.properties.description,
@@ -98,30 +121,33 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
           test3: this.properties.test3,
           context: this.context
         }
-      )
+      );
     
-    ReactDom.render(root, this.domElement)
+    ReactDom.render(root, this.domElement);
   }
 
-  // Don't want to dispatch action if we have reactive mode disabled
-  // Note: this property is set to false by default
-  protected onPropertyPaneFieldChanged(propertyPath, oldValue, newValue) {
-    if (!this.disableReactivePropertyChanges) {
-      this.store.dispatch(updateProperty(propertyPath, newValue))
-    }
-  }
+  // // Don't want to dispatch action if we have reactive mode disabled
+  // // Note: this property is set to false by default
+  // protected onPropertyPaneFieldChanged(
+  //   propertyPath: string, 
+  //   oldValue: string | boolean,
+  //   newValue: string | boolean): void {
+  //   if (!this.disableReactivePropertyChanges) {
+  //     this.store.dispatch(updateProperty(propertyPath, newValue))
+  //   }
+  // }
 
-  protected onInit() {
-    this.store.dispatch(applyProperties(this.properties))
-    return Promise.resolve(true)
-  }
+  // protected onInit() {
+  //   this.store.dispatch(applyProperties(this.properties))
+  //   return Promise.resolve(true)
+  // }
 
-  protected onAfterPropertyPaneChangesApplied() {
-    this.store.dispatch(applyProperties(this.properties))
-  }
+  // protected onAfterPropertyPaneChangesApplied() {
+  //   this.store.dispatch(applyProperties(this.properties))
+  // }
 
   protected get dataVersion(): Version {
-    return Version.parse('1.0')
+    return Version.parse('1.0');
   }
 
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
@@ -164,6 +190,6 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
           ]
         }
       ]
-    }
+    };
   }
 }

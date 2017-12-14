@@ -1,10 +1,10 @@
-import * as React from 'react'
-import { escape } from '@microsoft/sp-lodash-subset'
-import WebPartContext from "@microsoft/sp-webpart-base/lib/core/WebPartContext";
-import styles from './Example.module.scss'
-import WebList from '../WebList/WebList.component'
+import * as React from 'react';
+import { escape } from '@microsoft/sp-lodash-subset';
+import WebPartContext from '@microsoft/sp-webpart-base/lib/core/WebPartContext';
+import styles from './Example.module.scss';
+import WebList from '../WebList/WebList.component';
 
-export interface IExampleProps {
+export interface ExampleProps {
   description: string;
   test: string;
   test1: boolean;
@@ -13,25 +13,25 @@ export interface IExampleProps {
   context: WebPartContext;
 }
 
-const r = React.createElement
+const r = React.createElement;
 
-const Example = ({ description, test, context }: IExampleProps) =>
+const Example = ({ description, test, context }: ExampleProps) =>
   r('div', { className: styles.example }, [
     r('div', { className: styles.container }, [
       r('div', { className: styles.row }, [
         r('div', { className: styles.column }, [
-          r('span', { className: styles.title }, "Welcome to SharePoint!"),
-          r('p', { className: styles.subTitle }, "Customize SharePoint experiences using Web Parts."),
+          r('span', { className: styles.title }, 'Welcome to SharePoint!'),
+          r('p', { className: styles.subTitle }, 'Customize SharePoint experiences using Web Parts.'),
           r('p', { className: styles.description }, escape(description)),
           r('p', { className: styles.description }, escape(test)),
           r('p', { className: styles.description }, `Loading from ${escape(context.pageContext.web.title)}`),
-          r('a', { href: "https://aka.ms/spfx", className: styles.button }, [
-            r('span', { className: styles.label }, "Learn more")
+          r('a', { href: 'https://aka.ms/spfx', className: styles.button }, [
+            r('span', { className: styles.label }, 'Learn more')
           ])
         ])
       ]),
       WebList()
     ])
-  ])
+  ]);
 
-export default Example
+export default Example;
