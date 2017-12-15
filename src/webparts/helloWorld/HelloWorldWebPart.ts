@@ -22,7 +22,8 @@ import {
 } from '@microsoft/sp-http';
 
 import * as strings from 'HelloWorldWebPartStrings';
-import DefaultContainer from '../../containers/DefaultContainer';
+import Example from '../../components/Example/Example.component';
+// import DefaultContainer from '../../containers/DefaultContainer';
 // import { createStore, IState } from '../../store';
 // import { applyProperties, updateProperty } from '../../reducers/webpart'
 // import { Store } from 'redux';
@@ -40,14 +41,14 @@ export interface HelloWorldWebPartProps {
   context: WebPartContext;
 }
 
-export type HelloWorldState = HelloWorldPropValue[];
+// export type HelloWorldState = HelloWorldPropValue[];
 
-export interface HelloWorldPropValue {
-  id: number;
-  value: string | boolean;
-}
+// export interface HelloWorldPropValue {
+//   id: number;
+//   value: string | boolean;
+// }
 
-export enum HelloWorldActionType {
+export enum ActionType {
   UPDATE_DESCRIPTION = 'UPDATE_DESCRIPTION',
   UPDATE_TEST = 'UPDATE_TEST',
   UPDATE_TEST1 = 'UPDATE_TEST1',
@@ -55,36 +56,113 @@ export enum HelloWorldActionType {
   UPDATE_TEST3 = 'UPDATE_TEST3'
 }
 
-export interface HelloWorldAction {
-  id: number;
-  type: HelloWorldActionType;
+// export interface HelloWorldAction {
+//   id: number;
+//   type: HelloWorldActionType;
+//   value: string | boolean;
+// }
+
+// const helloWorldReducer = (state: HelloWorldState, action: HelloWorldAction): HelloWorldState => {
+//   switch (action.type) {
+//     case HelloWorldActionType.UPDATE_DESCRIPTION:
+//     case HelloWorldActionType.UPDATE_TEST:
+//     case HelloWorldActionType.UPDATE_TEST2:
+//       return [
+//         ...state,
+//         {
+//           id: action.id,
+//           value: action.value as string
+//         }
+//       ];
+//     case HelloWorldActionType.UPDATE_TEST1:
+//     case HelloWorldActionType.UPDATE_TEST3:
+//       return [
+//         ...state,
+//         {
+//           id: action.id,
+//           value: action.value as boolean
+//         }
+//       ];
+//     default:
+//       return state;
+//   }
+// };
+
+// const initialState: HelloWorldState = [
+//   { id: 0, value: 'HelloWorld' },
+//   { id: 1, value: 'Multi-line text field' },
+//   { id: 2, value: true },
+//   { id: 3, value: '1' },
+//   { id: 4, value: true }
+// ];
+
+interface Action {
+  type: ActionType;
   value: string | boolean;
 }
 
-const helloWorldReducer = (state: HelloWorldState, action: HelloWorldAction): HelloWorldState => {
+interface State {
+  description: string;
+  test: string;
+  test1: boolean;
+  test2: string;
+  test3: boolean;
+}
+
+const initState: State = {
+  description: 'HelloWorld',
+  test: 'Multi-line text field',
+  test1: true,
+  test2: '1',
+  test3: true
+};
+
+const reducer = (state: State, action: Action): State => {
   switch (action.type) {
-    case HelloWorldActionType.UPDATE_DESCRIPTION:
-    case HelloWorldActionType.UPDATE_TEST:
-    case HelloWorldActionType.UPDATE_TEST2:
-      return [
+    case ActionType.UPDATE_DESCRIPTION:
+      return {
         ...state,
-        {
-          id: action.id,
-          value: action.value as string
-        }
-      ];
-    case HelloWorldActionType.UPDATE_TEST1:
-    case HelloWorldActionType.UPDATE_TEST3:
-      return [
+        description: action.value as string
+      };
+    case ActionType.UPDATE_TEST:
+      return {
         ...state,
-        {
-          id: action.id,
-          value: action.value as boolean
-        }
-      ];
+        test: action.value as string
+      };
+    case ActionType.UPDATE_TEST1:
+      return {
+        ...state,
+        test1: action.value as boolean
+      };
+    case ActionType.UPDATE_TEST2:
+      return {
+        ...state,
+        test2: action.value as string
+      };
+    case ActionType.UPDATE_TEST3:
+      return {
+        ...state,
+        test3: action.value as boolean
+      };
     default:
       return state;
   }
+};
+
+const testUpdateProperty = (): void => {
+  const stateBefore: State = initialState; 
+  const action: Action = {
+    type: HelloWorldActionType.UPDATE_DESCRIPTION,
+    value: 'updated description' 
+  };
+  const stateAfter: State = {
+    description: 'update descrpition',
+    test: 'Multi-line text field',
+    test1: true,
+    test2: '1',
+    test3: true   
+  };
+
 };
 
 export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldWebPartProps> {
@@ -112,7 +190,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
 
     const root: React.ReactElement<HelloWorldWebPartProps> = 
       // r(Provider, { store: this.store })
-      r(DefaultContainer,
+      r(Example,
         {
           description: this.properties.description,
           test: this.properties.test,
