@@ -41,13 +41,6 @@ export interface HelloWorldWebPartProps {
   context: WebPartContext;
 }
 
-// export type HelloWorldState = HelloWorldPropValue[];
-
-// export interface HelloWorldPropValue {
-//   id: number;
-//   value: string | boolean;
-// }
-
 export enum ActionType {
   UPDATE_DESCRIPTION = 'UPDATE_DESCRIPTION',
   UPDATE_TEST = 'UPDATE_TEST',
@@ -55,46 +48,6 @@ export enum ActionType {
   UPDATE_TEST2 = 'UPDATE_TEST2',
   UPDATE_TEST3 = 'UPDATE_TEST3'
 }
-
-// export interface HelloWorldAction {
-//   id: number;
-//   type: HelloWorldActionType;
-//   value: string | boolean;
-// }
-
-// const helloWorldReducer = (state: HelloWorldState, action: HelloWorldAction): HelloWorldState => {
-//   switch (action.type) {
-//     case HelloWorldActionType.UPDATE_DESCRIPTION:
-//     case HelloWorldActionType.UPDATE_TEST:
-//     case HelloWorldActionType.UPDATE_TEST2:
-//       return [
-//         ...state,
-//         {
-//           id: action.id,
-//           value: action.value as string
-//         }
-//       ];
-//     case HelloWorldActionType.UPDATE_TEST1:
-//     case HelloWorldActionType.UPDATE_TEST3:
-//       return [
-//         ...state,
-//         {
-//           id: action.id,
-//           value: action.value as boolean
-//         }
-//       ];
-//     default:
-//       return state;
-//   }
-// };
-
-// const initialState: HelloWorldState = [
-//   { id: 0, value: 'HelloWorld' },
-//   { id: 1, value: 'Multi-line text field' },
-//   { id: 2, value: true },
-//   { id: 3, value: '1' },
-//   { id: 4, value: true }
-// ];
 
 interface Action {
   type: ActionType;
@@ -108,14 +61,6 @@ interface State {
   test2: string;
   test3: boolean;
 }
-
-const initState: State = {
-  description: 'HelloWorld',
-  test: 'Multi-line text field',
-  test1: true,
-  test2: '1',
-  test3: true
-};
 
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
@@ -147,22 +92,6 @@ const reducer = (state: State, action: Action): State => {
     default:
       return state;
   }
-};
-
-const testUpdateProperty = (): void => {
-  const stateBefore: State = initialState; 
-  const action: Action = {
-    type: HelloWorldActionType.UPDATE_DESCRIPTION,
-    value: 'updated description' 
-  };
-  const stateAfter: State = {
-    description: 'update descrpition',
-    test: 'Multi-line text field',
-    test1: true,
-    test2: '1',
-    test3: true   
-  };
-
 };
 
 export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldWebPartProps> {

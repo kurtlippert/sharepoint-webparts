@@ -10,10 +10,12 @@
     "serve": "set NODE_NO_HTTP2=1 && gulp serve",
     "clean": "gulp clean",
     "cmp-test": "tsc --p tsconfig.tape.json --outDir dist --outFile test.tape.js --types node",
-    "test": "set TS_NODE_COMPILER_OPTIONS={\"target\":\"es5\"} && ts-node node_modules/tape/bin/tape './test.ts'",
+    "test-tape": "set TS_NODE_COMPILER_OPTIONS={\"target\":\"es5\"} && ts-node node_modules/tape/bin/tape './test.ts'",
+    "test": "node -r ts-node/register \"node_modules/tape/bin/tape\" src/**/*.tape.ts | tap-dot --colors",
     "gulp-test": "gulp test",
     "scaffold": "yo @microsoft/sharepoint",
-    "check": "ts-node -e 'console.log(\"Hello, world!\")'"
+    "check": "ts-node -e console.log(\"Hello, world!\")",
+    "check2": "tape -v"
   },
   "dependencies": {
     "@microsoft/sp-core-library": "~1.3.4",
@@ -54,7 +56,7 @@
     "gulp": "~3.9.1",
     "tap-dot": "^1.0.5",
     "tape": "^4.8.0",
-    "ts-node": "^3.2.2",
+    "ts-node": "^4.0.2",
     "tsc-glob": "^2.0.1",
     "tslint": "^5.8.0"
   }
