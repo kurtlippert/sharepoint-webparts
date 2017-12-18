@@ -2,7 +2,7 @@ import * as React from 'react';
 import { escape } from '@microsoft/sp-lodash-subset';
 import WebPartContext from '@microsoft/sp-webpart-base/lib/core/WebPartContext';
 import styles from './Example.module.scss';
-import WebList from '../WebList/WebList.component';
+// import WebList from '../WebList/WebList.component';
 
 export interface ExampleProps {
   description: string;
@@ -29,8 +29,8 @@ const Example = ({ description, test, context }: ExampleProps) =>
             r('span', { className: styles.label }, 'Learn more')
           ])
         ])
-      ]),
-      WebList()
+      ])
+      // WebList()
     ])
   ]);
 

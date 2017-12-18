@@ -1,11 +1,11 @@
-import * as React from 'react'
-import { ISPList } from './FetchHttpClientData'
-import { listStyle, listItemStyle } from './WebList.style'
-import { connect } from 'react-redux'
+import * as React from 'react';
+import { ISPList } from './FetchHttpClientData';
+import { listStyle, listItemStyle } from './WebList.style';
+// import { connect } from 'react-redux';
 
-const r = React.createElement
+const r = React.createElement;
 
-export function renderList(items: ISPList[], selector: string): void {
+export function renderList(items: ISPList[], selector: string, domElement: Element): void {
   const html: string = 
     items.map(item => 
       r('ul', { className: listStyle }, [
@@ -13,10 +13,12 @@ export function renderList(items: ISPList[], selector: string): void {
           r('span', { className: 'ms-font-l' }, item.Title)
         ])
       ])
-    ).join('')
+    ).join('');
 
-  const listContainer: Element = this.domElement.querySelector(selector)
-  listContainer.innerHTML = html
+  const listContainer: Element | null = domElement.querySelector(selector);
+  if (listContainer !== null) {
+    listContainer.innerHTML = html;
+  }
 }
 
 // const mapStateToProps = (state) => ({
@@ -24,7 +26,7 @@ export function renderList(items: ISPList[], selector: string): void {
 // })
 
 const WebList = () =>
-  r('div', {}, 'Web List will go here')
+  r('div', {}, 'Web List will go here');
   // ispItems.map((ispItem: ISPList) =>
   //   r('ul', { className: listStyle }, [
   //     r('li', { className: listItemStyle }, [
@@ -33,7 +35,7 @@ const WebList = () =>
   //   ]))
   // r('div', { id: 'spListContainer' })
 
-export default WebList
+export default WebList;
 
 // const HelloWorld = ({ description, test, context }: IHelloWorldWebPartProps) =>
 //   r('div', { className: styles.helloWorld }, [
