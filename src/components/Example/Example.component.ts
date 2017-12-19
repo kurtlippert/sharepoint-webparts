@@ -20,7 +20,7 @@ const Example = ({ description, test, context }: ExampleProps) =>
     r('div', { className: styles.container }, [
       r('div', { className: styles.row }, [
         r('div', { className: styles.column }, [
-          r('span', { className: styles.title }, 'Welcome to SharePoint!'),
+          r('span', { className: styles.title, key: 'sp-title' }, 'Welcome to SharePoint!'),
           r('p', { className: styles.subTitle }, 'Customize SharePoint experiences using Web Parts.'),
           r('p', { className: styles.description }, escape(description)),
           r('p', { className: styles.description }, escape(test)),

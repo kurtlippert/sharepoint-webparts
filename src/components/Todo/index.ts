@@ -113,27 +113,28 @@ export default class Todo extends React.Component<TodoProps, {}> {
 
     public render(): React.ReactHTMLElement<HTMLElement> {
         // tslint:disable-next-line:no-console
-        console.log(this.props);
+        // console.log(this.props);
         // tslint:disable-next-line:no-console
-        console.log(this.props.todos.map(_ => ({ id: 999, text: 'wad up?' })));
+        // console.log(this.props.todos.map(_ => ({ id: 999, text: 'wad up?' })));
 
         // tslint:disable-next-line:no-console
-        console.log(this.todoInput);
+        // console.log(this.todoInput);
 
         return (
             r('div', {}, [
                 r('input', {
-                    ref: node => node === null ? '' : this.todoInput = node as HTMLInputElement
+                    ref: node => node === null ? '' : this.todoInput = node as HTMLInputElement,
+                    key: 'todo-input'
                 }),
                 r('button', {
                     onClick: () => {
                         // tslint:disable-next-line:no-console
-                        console.log(`input: ${this.todoInput.value}`);
+                        // console.log(`input: ${this.todoInput.value}`);
 
                         // tslint:disable-next-line:no-console
-                        console.log('state before:');
+                        // console.log('state before:');
                         // tslint:disable-next-line:no-console
-                        console.log(this.props.store.getState());
+                        // console.log(this.props.store.getState());
 
                         this.props.store.dispatch({
                             type: TodoActionType.ADD_TODO,
@@ -143,13 +144,14 @@ export default class Todo extends React.Component<TodoProps, {}> {
                         this.todoInput.value = '';
 
                         // tslint:disable-next-line:no-console
-                        console.log('state after:');
+                        // console.log('state after:');
                         // tslint:disable-next-line:no-console
-                        console.log(this.props.store.getState());
-                    }
+                        // console.log(this.props.store.getState());
+                    },
+                    key: 'todo-button'
                 },
                 'Add Todo'),
-                r('ul', {}, 
+                r('ul', { key: 'todo-list' }, 
                     this.props.todos.map(todoItem =>
                         r('li',
                             {

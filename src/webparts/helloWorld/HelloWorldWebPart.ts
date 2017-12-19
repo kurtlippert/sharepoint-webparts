@@ -65,7 +65,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
     // if (this.renderedOnce) { return; }
 
     // const root: React.ReactElement<IHelloWorldWebPartProps> = 
-    //   React.createElement(
+      // React.createElement(
     //     Example,
     //     {
     //       description: this.properties.description,
@@ -75,7 +75,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
     //   )
 
     // tslint:disable-next-line:no-console
-    console.log(this.store.getState().todos);
+    // console.log(this.store.getState().todos);
 
     const root = 
       // React.createElement(Provider, { store: this.store },
