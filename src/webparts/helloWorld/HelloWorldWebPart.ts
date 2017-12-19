@@ -35,6 +35,11 @@ import { createStore, Store, Reducer } from 'redux';
 // import IExampleProps from '../../components/Example/Example.props';
 
 import WebList from '../../components/WebList/WebList.component';
+import Todo, { TodoReducerMap } from '../../components/Todo';
+
+// import { State } from '../../rootState';
+// import RootReducer from '../../rootReducer';
+import { todosReducer } from '../../components/Todo';
 
 export interface HelloWorldWebPartProps {
   description: string;
@@ -45,89 +50,15 @@ export interface HelloWorldWebPartProps {
   context: WebPartContext;
 }
 
-export enum ActionType {
-  NO_OP,
-  UPDATE_DESCRIPTION,
-  UPDATE_TEST,
-  UPDATE_TEST1,
-  UPDATE_TEST2,
-  UPDATE_TEST3,
-  APPLY_PROPERTIES
-}
-
-interface Action {
-  type: ActionType;
-  value: string | boolean | HelloWorldWebPartProps;
-}
-
-interface State {
-  description: string;
-  test: string;
-  test1: boolean;
-  test2: string;
-  test3: boolean;
-}
-
-const reducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case ActionType.UPDATE_DESCRIPTION:
-      return {
-        ...state,
-        description: action.value as string
-      };
-    case ActionType.UPDATE_TEST:
-      return {
-        ...state,
-        test: action.value as string
-      };
-    case ActionType.UPDATE_TEST1:
-      return {
-        ...state,
-        test1: action.value as boolean
-      };
-    case ActionType.UPDATE_TEST2:
-      return {
-        ...state,
-        test2: action.value as string
-      };
-    case ActionType.UPDATE_TEST3:
-      return {
-        ...state,
-        test3: action.value as boolean
-      };
-    case ActionType.APPLY_PROPERTIES:
-      return action.value as HelloWorldWebPartProps;
-    default:
-      return state;
-  }
-};
-
-const typeToUpdate = (propertyPath: string): ActionType => {
-  switch (propertyPath) {
-    case 'description':
-      return ActionType.UPDATE_DESCRIPTION;
-    case 'test':
-      return ActionType.UPDATE_TEST;
-    case 'test1':
-      return ActionType.UPDATE_TEST1;
-    case 'test2':
-      return ActionType.UPDATE_TEST2;
-    case 'test3':
-      return ActionType.UPDATE_TEST3;
-    default:
-      return ActionType.NO_OP;
-  }
-};
-
 export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldWebPartProps> {
   // Define redux store
-  private store: Store<State>;
+  private store: Store<TodoReducerMap>;
 
   // initialize store when webpart is constructed
   public constructor() {
     super();
 
-    this.store = createStore(reducer as Reducer<State>);
+    this.store = createStore(todosReducer as Reducer<TodoReducerMap>);
   }
 
   public render(): void {
@@ -143,6 +74,9 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
     //     }
     //   )
 
+    // tslint:disable-next-line:no-console
+    console.log(this.store.getState().todos);
+
     const root = 
       // React.createElement(Provider, { store: this.store },
         // React.createElement(
@@ -150,6 +84,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
         //   {
         //     store: this.store
         //   },
+
         r('div', {}, [
             r(Example, {
                 description: this.properties.description,
@@ -161,7 +96,8 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
               }
             ),
             r(Todo, {
-              todos: this.store.getState().todos
+              todos: this.store.getState().todos,
+              store: this.store
             }),
             r(WebList)
           ]
@@ -186,37 +122,42 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
 
   // Don't want to dispatch action if we have reactive mode disabled
   // Note: this property is set to false by default
-  protected onPropertyPaneFieldChanged(
-  propertyPath: string, 
-  newValue: string | boolean): void {
+  // protected onPropertyPaneFieldChanged(
+  // propertyPath: string, 
+  // newValue: string | boolean): void {
 
-    // if (!this.disableReactivePropertyChanges) {
-      // this.store.dispatch(updateProperty(propertyPath, newValue));
+  //   // if (!this.disableReactivePropertyChanges) {
+  //     // this.store.dispatch(updateProperty(propertyPath, newValue));
 
-      // reducer(this.properties, {
-      //   type: typeToUpdate(propertyPath),
-      //   value: newValue
-      // });
+  //     // reducer(this.properties, {
+  //     //   type: typeToUpdate(propertyPath),
+  //     //   value: newValue
+  //     // });
 
-      // tslint:disable-next-line:no-console
-      // console.log(`${propertyPath}: ${newValue}`);
+  //     // tslint:disable-next-line:no-console
+  //     // console.log(`${propertyPath}: ${newValue}`);
 
-      // // tslint:disable-next-line:no-console
-      // console.log(`before: `);
-      // // tslint:disable-next-line:no-console
-      // console.log(this.store.getState());
+  //     // // tslint:disable-next-line:no-console
+  //     // console.log(`before: `);
+  //     // // tslint:disable-next-line:no-console
+  //     // console.log(this.store.getState());
 
-      // returns the new value of the json object, but isn't used currently
-      this.store.dispatch({
-        type: typeToUpdate(propertyPath),
-        value: newValue
-      });
+  //     // returns the new value of the json object, but isn't used currently
+  //     // this.store.dispatch({
+  //     //   type: typeToUpdate(propertyPath),
+  //     //   value: newValue
+  //     // });
 
-      // // tslint:disable-next-line:no-console
-      // console.log(`after: `);
-      // // tslint:disable-next-line:no-console
-      // console.log(this.store.getState());
-    // }
+  //     // // tslint:disable-next-line:no-console
+  //     // console.log(`after: `);
+  //     // // tslint:disable-next-line:no-console
+  //     // console.log(this.store.getState());
+  //   // }
+  // }
+
+  protected onInit(): Promise<void> {
+    this.store.subscribe(this.render);
+    return super.onInit();
   }
 
   // protected onInit(): Promise<void> {

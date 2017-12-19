@@ -10,14 +10,14 @@
 //   webpart: webpartReducer
 // });
 
-import { combineReducers, Reducer } from 'redux';
+// import { combineReducers, Reducer } from 'redux';
 
-import { todoReducer, TodoState } from '../components/Todo';
+// import { todoReducer, TodoState } from '../components/Todo';
 
-export interface State {
-    todo: TodoState;
-}
+// export interface State {
+//     todo: TodoState;
+// }
 
-export const rootReducer: Reducer<State> = combineReducers<State>({
-    todo: todoReducer
-});
+// export const rootReducer: Reducer<State> = combineReducers<State>({
+//     todo: todoReducer
+// });

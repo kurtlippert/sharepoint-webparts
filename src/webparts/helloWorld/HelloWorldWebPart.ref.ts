@@ -160,9 +160,9 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
                 context: this.context
               }
             ),
-            r(Todo, {
-              todos: this.store.getState().todos
-            }),
+            // r(Todo, {
+            //   todos: this.store.getState().todos
+            // }),
             r(WebList)
           ]
         );

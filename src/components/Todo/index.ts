@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createElement as r } from 'react';
-import { combineReducers, createStore, Reducer, Store } from 'redux';
+import { combineReducers, Reducer, Store } from 'redux';
 
 // state
 export interface TodoState {
@@ -60,7 +60,7 @@ const todo = (state: TodoState, action: TodoAction): TodoState => {
     }
 };
 
-const todos = (state: TodoState[], action: TodoAction): TodoState[] => {
+const todos = (state: TodoState[] = [], action: TodoAction): TodoState[] => {
     switch (action.type) {
         case TodoActionType.ADD_TODO:
             return [
@@ -74,7 +74,7 @@ const todos = (state: TodoState[], action: TodoAction): TodoState[] => {
     }
 };
 
-const visibilityFilter = (state: VisibilityType, action: TodoAction): VisibilityType => {
+const visibilityFilter = (state: VisibilityType = VisibilityType.SHOW_ALL, action: TodoAction): VisibilityType => {
     switch (action.type) {
         case TodoActionType.SET_VISIBILITY_FILTER:
             return action.filter;
@@ -83,31 +83,43 @@ const visibilityFilter = (state: VisibilityType, action: TodoAction): Visibility
     }
 };
 
-// reducer combine
+// reducer combin
 export interface TodoReducerMap {
     todos: TodoState[];
     visibilityFilter: VisibilityType;
 }
 
-export const todoComponent: Reducer<TodoReducerMap> = combineReducers<TodoReducerMap>({
+export const todosReducer: Reducer<TodoReducerMap> = combineReducers<TodoReducerMap>({
     todos: todos as Reducer<TodoState[]>,
     visibilityFilter: visibilityFilter as Reducer<VisibilityType>
 });
 
 // view
-// export interface TodoProps {
-//     store: Store<;
-// }
+export interface TodoProps {
+    todos: TodoState[];
+    store: Store<TodoReducerMap>;
+}
 
-const store = createStore(todoComponent);
+// export const todoStore = createStore(todosReducer);
 
 let nextTodoId = 0;
 
 // export const Todo = ({ })
-class Todo extends React.Component<{}, {}> {
+export default class Todo extends React.Component<TodoProps, {}> {
+
     private todoInput: HTMLInputElement;
 
-    public render() {
+    // private store: Store<TodoState[]>;
+
+    public render(): React.ReactHTMLElement<HTMLElement> {
+        // tslint:disable-next-line:no-console
+        console.log(this.props);
+        // tslint:disable-next-line:no-console
+        console.log(this.props.todos.map(_ => ({ id: 999, text: 'wad up?' })));
+
+        // tslint:disable-next-line:no-console
+        console.log(this.todoInput);
+
         return (
             r('div', {}, [
                 r('input', {
@@ -115,17 +127,46 @@ class Todo extends React.Component<{}, {}> {
                 }),
                 r('button', {
                     onClick: () => {
-                        store.dispatch({
+                        // tslint:disable-next-line:no-console
+                        console.log(`input: ${this.todoInput.value}`);
+
+                        // tslint:disable-next-line:no-console
+                        console.log('state before:');
+                        // tslint:disable-next-line:no-console
+                        console.log(this.props.store.getState());
+
+                        this.props.store.dispatch({
                             type: TodoActionType.ADD_TODO,
                             text: this.todoInput.value === null ? '' : this.todoInput.value,
                             id: nextTodoId++
                         });
                         this.todoInput.value = '';
+
+                        // tslint:disable-next-line:no-console
+                        console.log('state after:');
+                        // tslint:disable-next-line:no-console
+                        console.log(this.props.store.getState());
                     }
-                }),
-                r('ul', {}, [
-                    
-                ])
+                },
+                'Add Todo'),
+                r('ul', {}, 
+                    this.props.todos.map(todoItem =>
+                        r('li',
+                            {
+                                key: todoItem.id,
+                                onClick: () => {
+                                    this.props.store.dispatch({
+                                        type: TodoActionType.TOGGLE_TODO,
+                                        id: todoItem.id
+                                    });
+                                },
+                                // style: `text-decoration: ${todoItem.completed ? 'line-through' : 'none'}`
+                                style: { textDecoration: todoItem.completed ? 'line-through' : 'none' }
+                            },
+                            todoItem.text
+                        )
+                    )
+                )
             ])
         );
     }
