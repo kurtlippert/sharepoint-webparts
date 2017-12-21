@@ -1,13 +1,14 @@
-// const test = require('tape');
 import * as test from 'tape';
+
 type Test = test.Test;
+const freeze = Object.freeze;
 
 export enum ActionType {
-  UPDATE_DESCRIPTION = 'UPDATE_DESCRIPTION',
-  UPDATE_TEST = 'UPDATE_TEST',
-  UPDATE_TEST1 = 'UPDATE_TEST1',
-  UPDATE_TEST2 = 'UPDATE_TEST2',
-  UPDATE_TEST3 = 'UPDATE_TEST3'
+  UPDATE_DESCRIPTION,
+  UPDATE_TEST,
+  UPDATE_TEST1,
+  UPDATE_TEST2,
+  UPDATE_TEST3
 }
 
 interface Action {
@@ -23,7 +24,7 @@ interface State {
   test3: boolean;
 }
 
-const initialState: State = Object.freeze({
+const initialState: State = freeze({
   description: 'HelloWorld',
   test: 'Multi-line text field',
   test1: true,
@@ -63,12 +64,14 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-// const testUpdateProperty = (): void => {
-  // const stateBefore: State = initialState; 
-  const action: Action = Object.freeze({
+test('basic action', (t: Test): void => {
+  const stateBefore = initialState;
+
+  const actionToDispatch: Action = freeze({
     type: ActionType.UPDATE_DESCRIPTION,
     value: 'updated description' 
   });
+
   const stateAfter: State = {
     description: 'updated description',
     test: 'Multi-line text field',
@@ -76,9 +79,15 @@ const reducer = (state: State, action: Action): State => {
     test2: '1',
     test3: true  
   };
-// };
 
-test('redux test', function (t: Test) {
-  t.deepEqual(reducer(initialState, action), stateAfter)
-  t.end()
-})
+  t.deepEqual(reducer(stateBefore, actionToDispatch), stateAfter);
+  t.end();
+});
+
+// test('another action', (t: Test): void => {
+//   const stateBefore = initialState; 
+
+//   const actionToDispatch: Action = freeze({
+//     type: ActionType
+//   })
+// })
