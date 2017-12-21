@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createElement as r } from 'react';
-import { combineReducers, Reducer, Store } from 'redux';
+import { combineReducers, Reducer, Store, Unsubscribe } from 'redux';
 
 // state
 export interface Todo {
@@ -90,15 +90,14 @@ export const todosReducer: Reducer<TodoReducerMap> = combineReducers<TodoReducer
 });
 
 // presentational components
-interface FilterProps {
-  filter: Filter;
-  currentFilter: Filter;
-  onFilterClick: (filter: Filter) => void;
+interface LinkProps {
+  active: boolean;
+  onClick: () => void;
   children?: React.ReactNode[];
 }
 
-const FilterLink: React.SFC<FilterProps> = ({ filter, currentFilter, onFilterClick, children }) => {
-  if (filter === currentFilter) {
+const Link: React.SFC<LinkProps> = ({ active, onClick, children }) => {
+  if (active) {
     return r('span', {}, children);
   }
 
@@ -106,10 +105,46 @@ const FilterLink: React.SFC<FilterProps> = ({ filter, currentFilter, onFilterCli
     href: '#',
     onClick: (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
-      onFilterClick(filter);
+      onClick();
     }
   }, children);
 };
+
+interface FilterLinkProps {
+  filter: Filter;
+  store: Store<TodoReducerMap>;
+  children?: React.ReactNode[];
+}
+
+class FilterLink extends React.Component<FilterLinkProps, {}> {
+  private unsubscribe: Unsubscribe;
+
+  public componentDidMount(): void {
+    this.unsubscribe =
+      this.props.store.subscribe(() => this.forceUpdate);
+  }
+
+  public componentWillUnmount(): void {
+    this.unsubscribe();
+  }
+
+  public render(): React.SFCElement<LinkProps> {
+    const { filter, children, store } = this.props;
+
+    return (
+      r(Link, {
+        active: filter === store.getState().filter,
+        onClick: () =>
+          store.dispatch(
+            setVisibilityFilter(
+              filter
+            )
+          )
+      },
+        children)
+    );
+  }
+}
 
 interface TodoProps {
   onClick: () => void;
@@ -167,32 +202,28 @@ const AddTodo: React.SFC<AddTodoProps> = ({ onAddTodoClick }) => {
 };
 
 interface FooterProps {
-  filter: Filter;
-  onFilterClick: (filter: Filter) => void;
+  store: Store<TodoReducerMap>;
 }
 
-const Footer: React.SFC<FooterProps> = ({ filter, onFilterClick }) => {
+const Footer: React.SFC<FooterProps> = ({ store }) => {
   return (
     r('p', {}, [
       'Show: ',
       r(FilterLink, {
         filter: 'SHOW_ALL',
-        currentFilter: filter,
-        onFilterClick
+        store
       },
         'All'),
       ', ',
       r(FilterLink, {
         filter: 'SHOW_ACTIVE',
-        currentFilter: filter,
-        onFilterClick
+        store
       },
         'Active'),
       ', ',
       r(FilterLink, {
         filter: 'SHOW_COMPLETED',
-        currentFilter: filter,
-        onFilterClick
+        store
       },
         'Completed')
     ])
@@ -211,6 +242,38 @@ const getVisibleTodos = (todoItems: Todo[], filter: Filter) => {
   }
 };
 
+interface VisibleTodoListProps {
+  store: Store<TodoReducerMap>;
+}
+
+class VisibleTodoList extends React.Component<VisibleTodoListProps, {}> {
+  private unsubscribe: Unsubscribe;
+
+  public componentDidMount(): void {
+    this.unsubscribe =
+      this.props.store.subscribe(() => this.forceUpdate);
+  }
+
+  public componentWillUnmount(): void {
+    this.unsubscribe();
+  }
+
+  public render(): React.SFCElement<TodoListProps> {
+    const { todoList, filter } = this.props.store.getState();
+    const store = this.props.store;
+
+    return (
+      r(TodoList, {
+        todoList: getVisibleTodos(todoList, filter),
+        onTodoClick: (id: number) =>
+          store.dispatch(
+            toggleTodo(id)
+          )
+      })
+    );
+  }
+}
+
 // container component
 export interface TodosProps {
   todoList: Todo[];
@@ -225,7 +288,7 @@ const setVisibilityFilter = (filter: Filter) => ({ type: 'SET_VISIBILITY_FILTER'
 
 let nextTodoId = 0;
 
-const Todos: React.SFC<TodosProps> = ({ todoList, filter, store }) =>
+const Todos: React.SFC<TodosProps> = ({ store }) =>
   r('div', {}, [
     r(AddTodo, {
       onAddTodoClick: (inputText: string) =>
@@ -236,24 +299,11 @@ const Todos: React.SFC<TodosProps> = ({ todoList, filter, store }) =>
           )
         )
     }),
-    r(TodoList, {
-      todoList: getVisibleTodos(todoList, filter),
-      onTodoClick: (id: number) =>
-        store.dispatch(
-          toggleTodo(
-            id
-          )
-        )
+    r(VisibleTodoList, {
+      store
     }),
     r(Footer, {
-      filter,
-      onFilterClick: (_filter: Filter) => {
-        store.dispatch(
-          setVisibilityFilter(
-            _filter
-          )
-        );
-      }
+      store
     })
   ]);
 
