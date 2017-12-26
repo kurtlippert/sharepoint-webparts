@@ -16,6 +16,7 @@ import {
 import * as strings from 'HelloWorldWebPartStrings';
 import Example from '../../components/Example/Example.component';
 import { createStore, Store, Reducer } from 'redux';
+import { Provider } from 'react-redux';
 
 import WebList from '../../components/WebList/WebList.component';
 import Todo, { TodoReducerMap } from '../../components/Todo';
@@ -45,7 +46,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
   public render(): void {
 
     const root =
-      r('div', {}, [
+      r(Provider, { store: this.store }, [
         r(Example, {
           description: this.properties.description,
           test: this.properties.test,
@@ -55,13 +56,9 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
           context: this.context
         }
         ),
-        r(Todo, {
-          ...this.store.getState(),
-          store: this.store
-        }),
+        r(Todo),
         r(WebList)
-      ]
-      );
+      ]);
 
     ReactDom.render(root, this.domElement);
   }
