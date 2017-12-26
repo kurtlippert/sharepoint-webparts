@@ -2,7 +2,6 @@ import * as React from 'react';
 import { createElement as r } from 'react';
 import { combineReducers, Reducer, Store, Dispatch } from 'redux';
 import { connect, DispatchProp } from 'react-redux';
-// import { ProviderContext } from '../../webparts/helloWorld/HelloWorldWebPart';
 
 // state
 export interface Todo {
@@ -94,20 +93,20 @@ export const todosReducer: Reducer<TodoReducerMap> = combineReducers<TodoReducer
 // presentational components
 interface LinkProps {
   active: boolean;
-  onClick: () => SetVisibilityActionType;
+  onLinkClick: () => SetVisibilityActionType;
   children?: React.ReactNode[];
 }
 
-const Link: React.SFC<LinkProps> = ({ active, onClick, children }) => {
+const Link: React.SFC<LinkProps> = ({ active, onLinkClick, children }) => {
   if (active) {
     return r('span', {}, children);
   }
 
   return r('a', {
     href: '#',
-    onClick: (e: React.MouseEvent<HTMLElement>) => {
+    onClick(e: React.MouseEvent<HTMLElement>): void {
       e.preventDefault();
-      onClick();
+      onLinkClick();
     }
   }, children);
 };
@@ -121,7 +120,7 @@ const mapStateToLinkProps = (state: TodoReducerMap, ownProps: FilterLinkProps) =
   active: state.filter === ownProps.filter
 });
 const mapDispatchToLinkProps = (dispatch: Dispatch<TodoReducerMap>, ownProps: FilterLinkProps) => ({
-  onClick: () =>
+  onLinkClick: () =>
     dispatch(
       setVisibilityFilter(
         ownProps.filter
@@ -141,7 +140,7 @@ interface TodoProps {
 
 const Todo: React.SFC<TodoProps> = ({ onClick, completed, text }) =>
   r('li', {
-    onClick: onClick,
+    onClick,
     style: { textDecoration: completed ? 'line-through' : 'none' }
   },
     text
@@ -149,7 +148,7 @@ const Todo: React.SFC<TodoProps> = ({ onClick, completed, text }) =>
 
 interface TodoListProps {
   todoList: Todo[];
-  onTodoClick: (todoItemId: number) => { type: TodoActionType, id: number }; // AddTodo Action-Type
+  onTodoClick: (todoItemId: number) => AddTodoActionType; // AddTodo Action-Type
 }
 
 const TodoList: React.SFC<TodoListProps> = ({ todoList, onTodoClick }) =>
@@ -176,7 +175,7 @@ const _AddTodo: React.SFC<DispatchProp<TodoReducerMap>> = ({ dispatch }) => {
         ref: node => node === null ? '' : todoInput = node as HTMLInputElement
       }),
       r('button', {
-        onClick: () => {
+        onClick(): void {
           dispatch !== undefined
             ? dispatch(addTodo(todoInput.value))
             // tslint:disable-next-line:no-console
