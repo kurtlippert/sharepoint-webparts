@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createElement as r } from 'react';
-import { combineReducers, Reducer, Store, Unsubscribe, Dispatch } from 'redux';
+import { combineReducers, Reducer, Store, Dispatch } from 'redux';
 import { connect, DispatchProp } from 'react-redux';
 // import { ProviderContext } from '../../webparts/helloWorld/HelloWorldWebPart';
 
@@ -133,43 +133,6 @@ const FilterLink = connect(
   mapDispatchToLinkProps
 )(Link);
 
-// class FilterLink extends React.Component<FilterLinkProps, {}> {
-//   public context: ProviderContext;
-//
-//   private static contextTypes: React.ValidationMap<ProviderContext> = {
-//     store: React.PropTypes.object.isRequired
-//   };
-//
-//   private unsubscribe: Unsubscribe;
-//
-//   public componentDidMount(): void {
-//     this.unsubscribe =
-//       this.context.store.subscribe(() => this.forceUpdate);
-//   }
-//
-//   public componentWillUnmount(): void {
-//     this.unsubscribe();
-//   }
-//
-//   public render(): React.SFCElement<LinkProps> {
-//     const { filter, children } = this.props;
-//     const { store } = this.context;
-//
-//     return (
-//       r(Link, {
-//         active: filter === store.getState().filter,
-//         onClick: () =>
-//           store.dispatch(
-//             setVisibilityFilter(
-//               filter
-//             )
-//           )
-//       },
-//         children)
-//     );
-//   }
-// }
-//
 interface TodoProps {
   onClick: () => void;
   completed: boolean;
@@ -201,6 +164,9 @@ const TodoList: React.SFC<TodoListProps> = ({ todoList, onTodoClick }) =>
     )
   );
 
+// Stateless-Functional component with no container component (aside from the root).
+// So the pattern here (that I just created), is to name our SFC: '_<name_of_component>'
+// then the 'container' connection function: '<name_of_component>'
 const _AddTodo: React.SFC<DispatchProp<TodoReducerMap>> = ({ dispatch }) => {
   let todoInput: HTMLInputElement;
 
@@ -212,7 +178,7 @@ const _AddTodo: React.SFC<DispatchProp<TodoReducerMap>> = ({ dispatch }) => {
       r('button', {
         onClick: () => {
           dispatch !== undefined
-            ? dispatch(addTodo(nextTodoId++, todoInput.value))
+            ? dispatch(addTodo(todoInput.value))
             // tslint:disable-next-line:no-console
             : console.error('dispatch is undefined');
 
@@ -223,7 +189,6 @@ const _AddTodo: React.SFC<DispatchProp<TodoReducerMap>> = ({ dispatch }) => {
     ])
   );
 };
-
 const AddTodo = connect()(_AddTodo);
 
 interface FooterProps {
@@ -240,14 +205,12 @@ const Footer: React.SFC<FooterProps> = () => {
         'All'),
       ', ',
       r(FilterLink, {
-        filter: 'SHOW_ACTIVE',
-        store
+        filter: 'SHOW_ACTIVE'
       },
         'Active'),
       ', ',
       r(FilterLink, {
-        filter: 'SHOW_COMPLETED',
-        store
+        filter: 'SHOW_COMPLETED'
       },
         'Completed')
     ])
@@ -292,9 +255,10 @@ interface AddTodoActionType {
   id: number;
   text: string;
 }
-const addTodo = (id: number, text: string): AddTodoActionType => ({
+let nextTodoId = 0;
+const addTodo = (text: string): AddTodoActionType => ({
   type: 'ADD_TODO',
-  id,
+  id: nextTodoId++,
   text
 });
 
@@ -316,9 +280,7 @@ const setVisibilityFilter = (filter: Filter): SetVisibilityActionType => ({
   filter
 });
 
-// container component
-let nextTodoId = 0;
-
+// root container component
 const Todos: React.SFC = () =>
   r('div', {}, [
     r(AddTodo),
