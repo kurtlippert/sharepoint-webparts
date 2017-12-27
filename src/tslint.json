@@ -1,21 +1,5 @@
 {
     "rules": {
-
-      // Following not supported by tslint - breaks the linter!
-      // "export-name": false,
-      // "no-duplicate-case": true,
-      // "no-function-expression": true,
-      // "no-unnecessary-semicolons": true,
-      // "no-unused-imports": true,
-      // "no-use-before-declare": true,
-      // "no-with-statement": true,
-      // "use-named-parameter": true,
-      // "valid-typeof": true,
-      // "prefer-const": true,
-      // "a11y-role": true,
-      // "member-ordering": [false],
-      // "no-constant-condition": [false],
-
       "class-name": false,
       "forin": false,
       "label-position": false,
