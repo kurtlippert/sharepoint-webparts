@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 import { Todo as TodoType, Store, Filter } from '../types';
 import { toggleTodo, ToggleTodoActionType, AddTodoActionType } from '../actions';
-import Todo from './Todo';
+import TodoList from './TodoList';
 
 // helper function
 // given a list of todo items,
@@ -21,28 +21,32 @@ const getVisibleTodos = (todoItems: TodoType[], filter: Filter) => {
   }
 };
 
-// presentational component
-// NOTE: have to export as part of the container component export
+// // presentational component
+// // NOTE: have to export as part of the container component export
+// export interface TodoListProps {
+//   todoList: TodoType[];
+//   onTodoClick: (todoItemId: number) => AddTodoActionType;
+// }
+
+// const r = React.createElement;
+
+// const TodoList: React.SFC<TodoListProps> = ({ todoList, onTodoClick }) =>
+//   r('ul', {},
+//     todoList.map(todoItem =>
+//       r(Todo, {
+//         key: todoItem.id,
+//         onClick: () => onTodoClick(todoItem.id),
+//         completed: todoItem.completed,
+//         text: todoItem.text
+//       })
+//     )
+//   );
+
 export interface TodoListProps {
   todoList: TodoType[];
   onTodoClick: (todoItemId: number) => AddTodoActionType;
 }
 
-const r = React.createElement;
-
-const TodoList: React.SFC<TodoListProps> = ({ todoList, onTodoClick }) =>
-  r('ul', {},
-    todoList.map(todoItem =>
-      r(Todo, {
-        key: todoItem.id,
-        onClick: () => onTodoClick(todoItem.id),
-        completed: todoItem.completed,
-        text: todoItem.text
-      })
-    )
-  );
-
-// container component
 interface StateFromProps {
   todoList: TodoType[];
 }
@@ -70,4 +74,4 @@ const mapDispatchToTodoListProps = (dispatch: Dispatch<Store>) => ({
 export default connect<StateFromProps, DispatchFromProps, void, Store>(
   mapStateToTodoListProps,
   mapDispatchToTodoListProps
-)(TodoList);
+)(TodoList as React.SFC<TodoListProps>);
