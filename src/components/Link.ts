@@ -1,14 +1,8 @@
+import * as React from 'react';
 import { createElement as r } from 'react';
-import { SetVisibilityActionType } from '../actions';
+import { LinkProps } from './FilterLink';
 
-// presentational components
-export interface LinkProps {
-  active: boolean;
-  onLinkClick: () => SetVisibilityActionType;
-  children?: React.ReactNode[];
-}
-
-export const Link: React.SFC<LinkProps> = ({ active, onLinkClick, children }) => {
+const Link: React.SFC<LinkProps> = ({ active, onLinkClick, children }) => {
   if (active) {
     return r('span', {}, children);
   }
@@ -21,3 +15,5 @@ export const Link: React.SFC<LinkProps> = ({ active, onLinkClick, children }) =>
     }
   }, children);
 };
+
+export default Link;

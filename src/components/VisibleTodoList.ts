@@ -1,12 +1,16 @@
-import { ComponentClass, StatelessComponent } from 'react';
+import * as React from 'react';
+
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { Todo, Todos, Filter } from '../types';
-import { toggleTodo } from '../actions';
-import TodoList from './TodoList';
-import { TodoListProps } from './TodoList';
 
-const getVisibleTodos = (todoItems: Todo[], filter: Filter) => {
+import { Todo as TodoType, Store, Filter } from '../types';
+import { toggleTodo, ToggleTodoActionType, AddTodoActionType } from '../actions';
+import Todo from './Todo';
+
+// helper function
+// given a list of todo items,
+// return those that match the provided filter
+const getVisibleTodos = (todoItems: TodoType[], filter: Filter) => {
   switch (filter) {
     case 'SHOW_ALL':
       return todoItems;
@@ -17,14 +21,44 @@ const getVisibleTodos = (todoItems: Todo[], filter: Filter) => {
   }
 };
 
-const mapStateToTodoListProps = (props: Todos) => ({
+// presentational component
+// NOTE: have to export as part of the container component export
+export interface TodoListProps {
+  todoList: TodoType[];
+  onTodoClick: (todoItemId: number) => AddTodoActionType;
+}
+
+const r = React.createElement;
+
+const TodoList: React.SFC<TodoListProps> = ({ todoList, onTodoClick }) =>
+  r('ul', {},
+    todoList.map(todoItem =>
+      r(Todo, {
+        key: todoItem.id,
+        onClick: () => onTodoClick(todoItem.id),
+        completed: todoItem.completed,
+        text: todoItem.text
+      })
+    )
+  );
+
+// container component
+interface StateFromProps {
+  todoList: TodoType[];
+}
+
+interface DispatchFromProps {
+  onTodoClick: (id: number) => ToggleTodoActionType;
+}
+
+const mapStateToTodoListProps = (store: Store) => ({
   todoList: getVisibleTodos(
-    props.todoList,
-    props.filter
+    store.todos,
+    store.filter
   )
 });
 
-const mapDispatchToTodoListProps = (dispatch: Dispatch<Todos>) => ({
+const mapDispatchToTodoListProps = (dispatch: Dispatch<Store>) => ({
   onTodoClick: (id: number) =>
     dispatch(
       toggleTodo(
@@ -33,9 +67,7 @@ const mapDispatchToTodoListProps = (dispatch: Dispatch<Todos>) => ({
     )
 });
 
-const VisibleTodoList = connect(
+export default connect<StateFromProps, DispatchFromProps, void, Store>(
   mapStateToTodoListProps,
   mapDispatchToTodoListProps
 )(TodoList);
-
-export default VisibleTodoList;

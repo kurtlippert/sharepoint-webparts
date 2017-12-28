@@ -1,5 +1,13 @@
 import { TodoActionType, Filter } from '../types';
 
+// Action Shape
+export interface TodoAction {
+  id: number;
+  text: string;
+  type: TodoActionType;
+  filter: Filter;
+}
+
 // Action Creators for the app
 export interface AddTodoActionType {
   type: TodoActionType;

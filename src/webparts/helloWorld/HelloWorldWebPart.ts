@@ -19,9 +19,9 @@ import { createStore, Store, Reducer } from 'redux';
 import { Provider } from 'react-redux';
 
 import WebList from '../../components/WebList/WebList.component';
-import Todo, { TodoReducerMap } from '../../components/Todo';
-
-import { todosReducer } from '../../components/Todo';
+import Todos from '../../components/App';
+import { todosReducer } from '../../reducers';
+import { Todos as TodosType } from '../../types';
 
 export interface HelloWorldWebPartProps {
   description: string;
@@ -34,12 +34,12 @@ export interface HelloWorldWebPartProps {
 
 export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldWebPartProps> {
   // Define redux store
-  private store: Store<TodoReducerMap>;
+  private store: Store<TodosType>;
 
   // initialize store when webpart is constructed
   public constructor() {
     super();
-    this.store = createStore(todosReducer as Reducer<TodoReducerMap>);
+    this.store = createStore(todosReducer as Reducer<TodosType>);
   }
 
   // using redux-react 'Provider' here in conjunction with the redux-react
@@ -57,7 +57,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
             test3: this.properties.test3,
             context: this.context
           }),
-          r(Todo),
+          r(Todos),
           r(WebList)
         ])
       );

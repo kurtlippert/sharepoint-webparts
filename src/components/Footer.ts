@@ -1,5 +1,5 @@
 import { createElement as r } from 'react';
-import { FilterLink } from './FilterLink';
+import FilterLink from './FilterLink';
 
 const Footer: React.SFC = () => {
   return (

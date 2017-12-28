@@ -1,5 +1,5 @@
-import { style } from 'typestyle'
-import { margin, padding, fontWeightNormal } from 'csstips'
+import { style } from 'typestyle';
+import { margin, padding, fontWeightNormal } from 'csstips';
 
 export const listStyle = style(
   margin(10),
@@ -14,7 +14,7 @@ export const listStyle = style(
     listStyleType: 'none',
     boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1)'
   }
-)
+);
 
 export const listItemStyle = style(
   margin(0),
@@ -31,5 +31,4 @@ export const listItemStyle = style(
     zoom: 1,
     position: 'relative'
   }
-)
-
+);

@@ -1,19 +1,34 @@
-import { StatelessComponent, ComponentClass } from 'react';
+import * as React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { Filter, Todos } from '../types';
-import { setVisibilityFilter } from '../actions';
-import { Link } from './Link';
+import { Filter, Store } from '../types';
+import { setVisibilityFilter, SetVisibilityActionType } from '../actions';
+import Link from './Link';
+
+export interface LinkProps {
+  active: boolean;
+  onLinkClick: () => SetVisibilityActionType;
+  children?: React.ReactNode[];
+}
 
 export interface FilterLinkProps {
   filter: Filter;
   children?: React.ReactNode[];
 }
 
-const mapStateToLinkProps = (state: Todos, ownProps: FilterLinkProps) => ({
-  active: state.filter === ownProps.filter
+interface StateToLink {
+  active: boolean;
+}
+
+interface DispatchToLink {
+  onLinkClick: () => SetVisibilityActionType;
+}
+
+export const mapStateToLinkProps = (store: Store, ownProps: FilterLinkProps) => ({
+  active: store.filter === ownProps.filter
 });
-const mapDispatchToLinkProps = (dispatch: Dispatch<Todos>, ownProps: FilterLinkProps) => ({
+
+export const mapDispatchToLinkProps = (dispatch: Dispatch<Store>, ownProps: FilterLinkProps) => ({
   onLinkClick: () =>
     dispatch(
       setVisibilityFilter(
@@ -21,7 +36,16 @@ const mapDispatchToLinkProps = (dispatch: Dispatch<Todos>, ownProps: FilterLinkP
       )
     )
 });
-export const FilterLink = connect(
+
+// interface AppProps extends FilterLinkProps, StateFromProps, DispatchFromProps {}
+
+// export const FilterLink: React.ComponentClass<FilterLinkProps> =
+//   connect<StateFromProps, DispatchFromProps, AppProps>(
+//   mapStateToLinkProps,
+//   mapDispatchToLinkProps
+// )(Link);
+
+/** LinkProps */
+export default connect<StateToLink, DispatchToLink, FilterLinkProps, Store>(
   mapStateToLinkProps,
-  mapDispatchToLinkProps
-)(Link);
+  mapDispatchToLinkProps)(Link);

@@ -8,7 +8,7 @@ export interface Todo {
   filter: Filter;
 }
 
-export interface Todos {
-  todoList: Todo[];
+export interface Store {
+  todos: Todo[];
   filter: Filter;
 }

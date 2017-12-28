@@ -1,23 +1,9 @@
-// import { combineReducers, Reducer } from 'redux';
+import { Reducer, combineReducers } from 'redux';
+import { Todos, Filter, Todo } from '../types';
+import  todos from './todos';
+import  filter from './filter';
 
-// import webpartReducer, { IWebpartState } from './webpart';
-
-// export interface IState {
-//   webpart: IWebpartState;
-// }
-
-// export const rootReducer: Reducer<IState> = combineReducers<IState>({
-//   webpart: webpartReducer
-// });
-
-// import { combineReducers, Reducer } from 'redux';
-
-// import { todoReducer, TodoState } from '../components/Todo';
-
-// export interface State {
-//     todo: TodoState;
-// }
-
-// export const rootReducer: Reducer<State> = combineReducers<State>({
-//     todo: todoReducer
-// });
+export const todosReducer: Reducer<Todos> = combineReducers<Todos>({
+  todos: todos as Reducer<Todo[]>,
+  filter: filter as Reducer<Filter>
+});
