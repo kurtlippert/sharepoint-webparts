@@ -15,15 +15,13 @@ import {
 
 import * as strings from 'HelloWorldWebPartStrings';
 import Example from '../../components/Example/Example.component';
-import { createStore, Store, Reducer } from 'redux';
+import { Store } from 'redux';
 import { Provider } from 'react-redux';
 
 import WebList from '../../components/WebList/WebList.component';
 import Todos from '../../components/App';
-import { todosReducer } from '../../reducers';
 import { StoreState } from '../../types';
-import { loadState, saveState } from '../../localStorage';
-import { throttle } from 'lodash';
+import configureStore from '../configureStore';
 
 export interface HelloWorldWebPartProps {
   description: string;
@@ -41,20 +39,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
   // initialize store when webpart is constructed
   public constructor() {
     super();
-
-    const preloadedState: StoreState = loadState();
-    this.store =
-      createStore(
-        todosReducer as Reducer<StoreState>,
-        preloadedState,
-      );
-
-    this.store.subscribe(throttle(() => {
-      saveState({
-        todos: this.store.getState().todos,
-        filter: 'SHOW_ALL',
-      });
-    }, 1000));
+    this.store = configureStore(this.store);
   }
 
   // using redux-react 'Provider' here in conjunction with the redux-react
