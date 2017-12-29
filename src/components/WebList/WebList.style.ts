@@ -12,8 +12,8 @@ export const listStyle = style(
     boxSizing: 'border-box',
     lineHeight: '50px',
     listStyleType: 'none',
-    boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1)'
-  }
+    boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.1)',
+  },
 );
 
 export const listItemStyle = style(
@@ -29,6 +29,6 @@ export const listItemStyle = style(
     boxSizing: 'border-box',
     boxShadow: 'none',
     zoom: 1,
-    position: 'relative'
-  }
+    position: 'relative',
+  },
 );

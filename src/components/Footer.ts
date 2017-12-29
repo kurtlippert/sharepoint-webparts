@@ -9,7 +9,7 @@ const Footer: React.SFC = () => {
       ', ',
       r(FilterLink, { filter: 'SHOW_ACTIVE' }, 'Active'),
       ', ',
-      r(FilterLink, { filter: 'SHOW_COMPLETED' }, 'Completed')
+      r(FilterLink, { filter: 'SHOW_COMPLETED' }, 'Completed'),
     ])
   );
 };

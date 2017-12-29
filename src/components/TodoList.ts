@@ -9,9 +9,9 @@ const TodoList: React.SFC<TodoListProps> = ({ todoList, onTodoClick }) =>
         key: todoItem.id,
         onClick: () => onTodoClick(todoItem.id),
         completed: todoItem.completed,
-        text: todoItem.text
-      })
-    )
+        text: todoItem.text,
+      }),
+    ),
   );
 
 export default TodoList;

@@ -25,12 +25,12 @@ const Example = ({ description, test, context }: ExampleProps) =>
           r('p', { className: styles.description }, escape(test)),
           r('p', { className: styles.description }, `Loading from ${escape(context.pageContext.web.title)}`),
           r('a', { href: 'https://aka.ms/spfx', className: styles.button }, [
-            r('span', { className: styles.label }, 'Learn more')
-          ])
-        ])
-      ])
+            r('span', { className: styles.label }, 'Learn more'),
+          ]),
+        ]),
+      ]),
       // WebList()
-    ])
+    ]),
   ]);
 
 export default Example;

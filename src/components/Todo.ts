@@ -9,9 +9,9 @@ export interface TodoProps {
 const Todo: React.SFC<TodoProps> = ({ onClick, completed, text }) =>
   r('li', {
     onClick,
-    style: { textDecoration: completed ? 'line-through' : 'none' }
+    style: { textDecoration: completed ? 'line-through' : 'none' },
   },
-    text
+    text,
   );
 
 export default Todo;

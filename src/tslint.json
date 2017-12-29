@@ -57,7 +57,7 @@
       "quotemark": [true, "single", "jsx-double", "avoid-escape"],
       "radix": false,
       "triple-equals": true,
-      "trailing-comma": [true, {"multiline": "never", "singleline": "never"}],
+      "trailing-comma": [true, {"multiline": "always", "singleline": "never"}],
       "object-literal-sort-keys": false
     }
 }

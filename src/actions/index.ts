@@ -1,8 +1,9 @@
 import { TodoActionType, Filter } from '../types';
+import { v4 } from 'node-uuid';
 
 // Action Shape
 export interface TodoAction {
-  id: number;
+  id: string;
   text: string;
   type: TodoActionType;
   filter: Filter;
@@ -11,23 +12,23 @@ export interface TodoAction {
 // Action Creators for the app
 export interface AddTodoActionType {
   type: TodoActionType;
-  id: number;
+  id: string;
   text: string;
 }
-let nextTodoId = 0;
+
 export const addTodo = (text: string): AddTodoActionType => ({
   type: 'ADD_TODO',
-  id: nextTodoId++,
-  text
+  id: v4(),
+  text,
 });
 
 export interface ToggleTodoActionType {
   type: TodoActionType;
-  id: number;
+  id: string;
 }
-export const toggleTodo = (id: number): ToggleTodoActionType => ({
+export const toggleTodo = (id: string): ToggleTodoActionType => ({
   type: 'TOGGLE_TODO',
-  id
+  id,
 });
 
 export interface SetVisibilityActionType {
@@ -36,5 +37,5 @@ export interface SetVisibilityActionType {
 }
 export const setVisibilityFilter = (filter: Filter): SetVisibilityActionType => ({
   type: 'SET_VISIBILITY_FILTER',
-  filter
+  filter,
 });

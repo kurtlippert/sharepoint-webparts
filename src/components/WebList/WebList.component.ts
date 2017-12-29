@@ -6,13 +6,13 @@ import { listStyle, listItemStyle } from './WebList.style';
 const r = React.createElement;
 
 export function renderList(items: ISPList[], selector: string, domElement: Element): void {
-  const html: string = 
-    items.map(item => 
+  const html: string =
+    items.map(item =>
       r('ul', { className: listStyle }, [
         r('li', { className: listItemStyle }, [
-          r('span', { className: 'ms-font-l' }, item.Title)
-        ])
-      ])
+          r('span', { className: 'ms-font-l' }, item.Title),
+        ]),
+      ]),
     ).join('');
 
   const listContainer: Element | null = domElement.querySelector(selector);
@@ -22,7 +22,7 @@ export function renderList(items: ISPList[], selector: string, domElement: Eleme
 }
 
 // const mapStateToProps = (state) => ({
-//   ispItems = 
+//   ispItems =
 // })
 
 const WebList = () =>

@@ -3,14 +3,14 @@ import * as React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
-import { Todo as TodoType, Store, Filter } from '../types';
+import { Todo, StoreState, Filter } from '../types';
 import { toggleTodo, ToggleTodoActionType, AddTodoActionType } from '../actions';
 import TodoList from './TodoList';
 
 // helper function
 // given a list of todo items,
 // return those that match the provided filter
-const getVisibleTodos = (todoItems: TodoType[], filter: Filter) => {
+const getVisibleTodos = (todoItems: Todo[], filter: Filter) => {
   switch (filter) {
     case 'SHOW_ALL':
       return todoItems;
@@ -21,57 +21,36 @@ const getVisibleTodos = (todoItems: TodoType[], filter: Filter) => {
   }
 };
 
-// // presentational component
-// // NOTE: have to export as part of the container component export
-// export interface TodoListProps {
-//   todoList: TodoType[];
-//   onTodoClick: (todoItemId: number) => AddTodoActionType;
-// }
-
-// const r = React.createElement;
-
-// const TodoList: React.SFC<TodoListProps> = ({ todoList, onTodoClick }) =>
-//   r('ul', {},
-//     todoList.map(todoItem =>
-//       r(Todo, {
-//         key: todoItem.id,
-//         onClick: () => onTodoClick(todoItem.id),
-//         completed: todoItem.completed,
-//         text: todoItem.text
-//       })
-//     )
-//   );
-
 export interface TodoListProps {
-  todoList: TodoType[];
-  onTodoClick: (todoItemId: number) => AddTodoActionType;
+  todoList: Todo[];
+  onTodoClick: (todoItemId: string) => AddTodoActionType;
 }
 
 interface StateFromProps {
-  todoList: TodoType[];
+  todoList: Todo[];
 }
 
 interface DispatchFromProps {
-  onTodoClick: (id: number) => ToggleTodoActionType;
+  onTodoClick: (id: string) => ToggleTodoActionType;
 }
 
-const mapStateToTodoListProps = (store: Store) => ({
+const mapStateToTodoListProps = (store: StoreState) => ({
   todoList: getVisibleTodos(
     store.todos,
-    store.filter
-  )
+    store.filter,
+  ),
 });
 
-const mapDispatchToTodoListProps = (dispatch: Dispatch<Store>) => ({
-  onTodoClick: (id: number) =>
+const mapDispatchToTodoListProps = (dispatch: Dispatch<StoreState>) => ({
+  onTodoClick: (id: string) =>
     dispatch(
       toggleTodo(
-        id
-      )
-    )
+        id,
+      ),
+    ),
 });
 
-export default connect<StateFromProps, DispatchFromProps, void, Store>(
+export default connect<StateFromProps, DispatchFromProps, void, StoreState>(
   mapStateToTodoListProps,
-  mapDispatchToTodoListProps
+  mapDispatchToTodoListProps,
 )(TodoList as React.SFC<TodoListProps>);

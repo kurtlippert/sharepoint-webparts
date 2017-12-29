@@ -7,7 +7,7 @@ const Todos: React.SFC = () =>
   r('div', {}, [
     r(AddTodo),
     r(VisibleTodoList),
-    r(Footer)
+    r(Footer),
   ]);
 
 export default Todos;

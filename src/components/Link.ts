@@ -12,7 +12,7 @@ const Link: React.SFC<LinkProps> = ({ active, onLinkClick, children }) => {
     onClick(e: React.MouseEvent<HTMLElement>): void {
       e.preventDefault();
       onLinkClick();
-    }
+    },
   }, children);
 };
 

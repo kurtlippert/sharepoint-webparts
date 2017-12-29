@@ -2,13 +2,12 @@ export type Filter = 'SHOW_ALL' | 'SHOW_COMPLETED' | 'SHOW_ACTIVE';
 export type TodoActionType = 'ADD_TODO' | 'TOGGLE_TODO' | 'SET_VISIBILITY_FILTER';
 
 export interface Todo {
-  id: number;
+  id: string;
   text: string;
   completed: boolean;
-  filter: Filter;
 }
 
-export interface Store {
+export interface StoreState {
   todos: Todo[];
   filter: Filter;
 }
