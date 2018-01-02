@@ -15,13 +15,20 @@ import {
 
 import * as strings from 'HelloWorldWebPartStrings';
 import Example from '../../components/Example/Example.component';
-import { Store } from 'redux';
+import { Store, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 
 import WebList from '../../components/WebList/WebList.component';
 import Todos from '../../components/App';
-import { StoreState } from '../../types';
+import { StoreState, WebInfo, FetchWebActionType } from '../../types';
 import configureStore from '../configureStore';
+import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
+import { Epic, createEpicMiddleware } from 'redux-observable';
+import 'rxjs/add/observable/fromPromise';
+import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs/Observable';
+// import SPHttpClient from '@microsoft/sp-http/lib/spHttpClient/SPHttpClient';
+// import SPHttpClientResponse from '@microsoft/sp-http/lib/spHttpClient/SPHttpClientResponse';
 
 export interface HelloWorldWebPartProps {
   description: string;
@@ -32,6 +39,42 @@ export interface HelloWorldWebPartProps {
   context: WebPartContext;
 }
 
+const getWebInfo = (webPartContext: WebPartContext, url: string) =>
+  webPartContext.spHttpClient
+    .get(url, SPHttpClient.configurations.v1)
+    .then((response: SPHttpClientResponse): Promise<WebInfo[]> => response.json());
+
+interface FetchWebInfoFulfilledPayload {
+  id: string;
+  title: string;
+}
+
+interface FetchWebInfoFulfilledAction {
+  type: FetchWebActionType;
+  payload: FetchWebInfoFulfilledPayload[];
+}
+
+interface WebInfoDependencies {
+  context: WebPartContext;
+  url: string;
+}
+
+const fetchWebInfoFulfilled = (payload: FetchWebInfoFulfilledPayload[]): FetchWebInfoFulfilledAction => ({
+  type: 'FETCH_WEB_INFO_FULFILLED',
+  payload,
+});
+
+const fetchWebInfoEpic:
+  Epic<FetchWebInfoFulfilledAction, Store<StoreState>, WebInfoDependencies> =
+    (action$, _, { context, url }) =>
+      action$.ofType('FETCH_WEB_INFO')
+        .mergeMap(() =>
+          Observable.fromPromise(getWebInfo(context, url))
+            .map(response => fetchWebInfoFulfilled(response)),
+        );
+
+const epicMiddleware = createEpicMiddleware(fetchWebInfoEpic);
+
 export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldWebPartProps> {
   // Define redux store
   private store: Store<StoreState>;
@@ -39,7 +82,7 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
   // initialize store when webpart is constructed
   public constructor() {
     super();
-    this.store = configureStore(this.store);
+    this.store = configureStore(this.store, applyMiddleware(epicMiddleware));
   }
 
   // using redux-react 'Provider' here in conjunction with the redux-react
@@ -68,9 +111,16 @@ export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldW
     ReactDom.render(root, this.domElement);
   }
 
-  // subscribe our store to the render function
   protected onInit(): Promise<void> {
+    // subscribe our store to the render function
     this.store.subscribe(this.render);
+
+    // immediately load our weblist on init
+    this.store.dispatch({
+      type: 'FETCH_WEB_INFO',
+      url: `${this.context.pageContext.web.absoluteUrl}/_api/web/lists?$filter=Hidden eq false`,
+    });
+
     return super.onInit();
   }
 
