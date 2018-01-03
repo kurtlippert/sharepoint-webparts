@@ -4,11 +4,11 @@ export const loadState = () => {
   try {
     const serializedState = localStorage.getItem('state');
     if (serializedState === null) {
-      return { todos: [], filter: 'SHOW_ALL' } as StoreState;
+      return { todos: [], filter: 'SHOW_ALL', webInfo: [] } as StoreState;
     }
     return JSON.parse(serializedState) as StoreState;
   } catch (err) {
-    return { todos: [], filter: 'SHOW_ALL' } as StoreState;
+    return { todos: [], filter: 'SHOW_ALL', webInfo: [] } as StoreState;
   }
 };
 

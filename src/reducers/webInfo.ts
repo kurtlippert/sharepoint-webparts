@@ -1,5 +1,9 @@
-import { WebInfo } from '../types';
-import { WebInfoAction } from '../actions';
+// import { WebInfo } from '../types';
+// import { WebInfoAction } from '../actions';
+import {
+  WebInfoPayload,
+  WebInfoAction,
+} from '../webparts/helloWorld/HelloWorldWebPart';
 // import WebPartContext from '@microsoft/sp-webpart-base/lib/core/WebPartContext';
 // import SPHttpClientResponse from '@microsoft/sp-http/lib/spHttpClient/SPHttpClientResponse';
 // import SPHttpClient from '@microsoft/sp-http/lib/spHttpClient/SPHttpClient';
@@ -9,12 +13,12 @@ import { WebInfoAction } from '../actions';
 //     .get(url, SPHttpClient.configurations.v1)
 //     .then((response: SPHttpClientResponse): Promise<WebInfo[]> => response.json());
 
-const webInfo = (state: WebInfo[] = [], action: WebInfoAction): WebInfo[] => {
+const webInfo = (state: WebInfoPayload[] = [], action: WebInfoAction): WebInfoPayload[] => {
   switch (action.type) {
-    case 'LOAD_ITEMS':
+    case 'FETCH_WEB_INFO_FULFILLED':
       return [
         ...state,
-        ...action.items,
+        ...action.payload,
       ];
     default:
       return state;

@@ -1,6 +1,6 @@
-import { TodoActionType, WebInfoActionType, Filter, WebInfo, FetchWebActionType } from '../types';
+import { TodoActionType, WebInfoActionType, Filter } from '../types';
 import { v4 } from 'node-uuid';
-import PageContext from '@microsoft/sp-page-context/lib/PageContext';
+// import PageContext from '@microsoft/sp-page-context/lib/PageContext';
 
 // Todo Action Shape
 export interface TodoAction {
@@ -58,18 +58,16 @@ export const setVisibilityFilter = (filter: Filter): SetVisibilityActionType => 
 
 export interface FetchWebInfoActionType {
   type: WebInfoActionType;
-  url: string;
 }
-export const fetchWebInfo = (pageContext: PageContext): FetchWebInfoActionType => ({
+export const fetchWebInfo = () => ({
   type: 'FETCH_WEB_INFO',
-  url: `${pageContext.web.absoluteUrl}/_api/web/lists?$filter=Hidden eq false`,
-});
+} as FetchWebInfoActionType);
 
-export interface LoadWebInfoActionType {
-  type: WebInfoActionType;
-  items: WebInfo[];
-}
-export const loadWebItems = (items: WebInfo[]): LoadWebInfoActionType => ({
-  type: 'LOAD_ITEMS',
-  items,
-});
+// export interface LoadWebInfoActionType {
+//   type: WebInfoActionType;
+//   items: WebInfo[];
+// }
+// export const loadWebItems = (items: WebInfo[]): LoadWebInfoActionType => ({
+//   type: 'LOAD_ITEMS',
+//   items,
+// });
