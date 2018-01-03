@@ -43,39 +43,6 @@ export interface HelloWorldWebPartProps {
   context: WebPartContext;
 }
 
-export const getWebInfo = (webPartContext: WebPartContext, url: string) =>
-  webPartContext.spHttpClient
-    .get(url, SPHttpClient.configurations.v1)
-    .then((response: SPHttpClientResponse): Promise<WebInfo[]> => response.json());
-
-export interface WebInfoPayload {
-  id: string;
-  title: string;
-}
-
-export interface WebInfoAction {
-  type: WebInfoActionType;
-  payload: WebInfoPayload[];
-}
-
-export interface WebInfoDependencies {
-  getJSON: (url: string) => Observable<WebInfo[]>;
-}
-
-const fetchWebInfoFulfilled = (payload: WebInfoPayload[]): WebInfoAction => ({
-  type: 'FETCH_WEB_INFO_FULFILLED',
-  payload,
-});
-
-export const fetchWebInfoEpic:
-  Epic<WebInfoAction, Store<StoreState>, WebInfoDependencies> =
-    (action$, _, { getJSON }) =>
-      action$.ofType('FETCH_WEB_INFO')
-        .mergeMap(() =>
-          getJSON('/_api/web/lists?$filter=Hidden eq false')
-            .map(response => fetchWebInfoFulfilled(response)),
-        );
-
 export default class HelloWorldWebPart extends BaseClientSideWebPart<HelloWorldWebPartProps> {
   // Define redux store
   private store: Store<StoreState>;
