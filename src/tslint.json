@@ -15,7 +15,6 @@
       "no-shadowed-variable": true,
       "no-switch-case-fall-through": true,
       "no-unused-expression": true,
-      "no-unused-variable": true,
       "no-unreachable": true,
       "semicolon": [true, "always"],
       "typedef": [true, "call-signature", "parameter", "member-variable-declaration", "property-declaration"],
