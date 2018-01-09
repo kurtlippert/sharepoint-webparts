@@ -1,15 +1,8 @@
-## sptest-2
+## sharepoint kace dashboard
 
-This is where you include your WebPart documentation.
+Dashbaord displaying the details of Quest Kace tickets and other metrics within the Kace system.
 
 ### Building the code
-
-```bash
-git clone the repo
-npm i
-npm i -g gulp
-gulp
-```
 
 This package produces the following:
 
@@ -19,8 +12,7 @@ This package produces the following:
 
 ### Build options
 
-gulp clean - TODO
-gulp test - TODO
-gulp serve - TODO
-gulp bundle - TODO
-gulp package-solution - TODO
+gulp clean - TODO  
+npm run test - currently just runs some unit tests (not complete)  
+npm run serve - starts the dev server  
+
