@@ -12,7 +12,7 @@ This package produces the following:
 
 ### Build options
 
-gulp clean - TODO
-npm run test - currently just runs some unit tests (not complete)
-npm run serve - starts the dev server
+gulp clean - TODO  
+npm run test - currently just runs some unit tests (not complete)  
+npm run serve - starts the dev server  
 
