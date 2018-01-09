@@ -12,9 +12,9 @@ const { div, ul, li, span } = React.DOM;
 const WebList: React.SFC<WebListProps> = ({ webInfo }) =>
   div({},
     webInfo.map((webInfoItem: WebInfo) =>
-      ul({ key: webInfoItem.id, className: listStyle },
+      ul({ key: webInfoItem.Id, className: listStyle },
         li({ className: listItemStyle },
-          span({ className: 'ms-font-l' }, webInfoItem.title),
+          span({ className: 'ms-font-l' }, webInfoItem.Title),
         ),
       )),
   );

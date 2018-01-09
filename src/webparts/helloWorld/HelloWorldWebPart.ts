@@ -44,10 +44,14 @@ export interface HelloWorldWebPartProps {
   context: WebPartContext;
 }
 
+interface SpPayload {
+  value: WebInfo[];
+}
+
 const mockData: WebInfo[] = [
-  { id: '1', title: 'Mock List' },
-  { id: '2', title: 'Mock List 2' },
-  { id: '3', title: 'Mock List 3' },
+  { Id: '1', Title: 'Mock List' },
+  { Id: '2', Title: 'Mock List 2' },
+  { Id: '3', Title: 'Mock List 3' },
 ];
 
 const getMockData =
@@ -62,7 +66,7 @@ export const getWebInfo = (webPartContext: WebPartContext, url: string) => {
       return (
         webPartContext.spHttpClient
             .get(webPartContext.pageContext.web.absoluteUrl + url, SPHttpClient.configurations.v1)
-            .then((response: SPHttpClientResponse): Promise<WebInfo[]> => response.json())
+            .then((response: SPHttpClientResponse): Promise<WebInfo[]> => response.json().then((data: SpPayload) => data.value))
       );
     default:
       return getMockData;

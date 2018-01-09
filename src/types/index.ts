@@ -9,8 +9,8 @@ export interface Todo {
 }
 
 export interface WebInfo {
-  id: string;
-  title: string;
+  Id: string;
+  Title: string;
 }
 
 export interface StoreState {

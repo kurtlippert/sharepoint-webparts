@@ -1,19 +1,7 @@
-// import { WebInfo } from '../types';
-// import { WebInfoAction } from '../actions';
-import {
-  WebInfoPayload,
-  WebInfoAction,
-} from '../epics';
-// import WebPartContext from '@microsoft/sp-webpart-base/lib/core/WebPartContext';
-// import SPHttpClientResponse from '@microsoft/sp-http/lib/spHttpClient/SPHttpClientResponse';
-// import SPHttpClient from '@microsoft/sp-http/lib/spHttpClient/SPHttpClient';
+import { WebInfo } from '../types';
+import { WebInfoAction } from '../epics';
 
-// const getWebInfo = (webPartContext: WebPartContext, url: string) =>
-//   webPartContext.spHttpClient
-//     .get(url, SPHttpClient.configurations.v1)
-//     .then((response: SPHttpClientResponse): Promise<WebInfo[]> => response.json());
-
-const webInfo = (state: WebInfoPayload[] = [], action: WebInfoAction): WebInfoPayload[] => {
+const webInfo = (state: WebInfo[] = [], action: WebInfoAction): WebInfo[] => {
   switch (action.type) {
     case 'FETCH_WEB_INFO_FULFILLED':
       return [

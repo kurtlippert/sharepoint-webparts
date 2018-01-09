@@ -3,14 +3,14 @@ import FilterLink from './FilterLink';
 
 const Footer: React.SFC = () => {
   return (
-    r('p', {}, [
+    r('p', {},
       'Show: ',
       r(FilterLink, { filter: 'SHOW_ALL' }, 'All'),
       ', ',
       r(FilterLink, { filter: 'SHOW_ACTIVE' }, 'Active'),
       ', ',
       r(FilterLink, { filter: 'SHOW_COMPLETED' }, 'Completed'),
-    ])
+    )
   );
 };
 
