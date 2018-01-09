@@ -3,7 +3,7 @@
 import {
   WebInfoPayload,
   WebInfoAction,
-} from '../webparts/helloWorld/HelloWorldWebPart';
+} from '../epics';
 // import WebPartContext from '@microsoft/sp-webpart-base/lib/core/WebPartContext';
 // import SPHttpClientResponse from '@microsoft/sp-http/lib/spHttpClient/SPHttpClientResponse';
 // import SPHttpClient from '@microsoft/sp-http/lib/spHttpClient/SPHttpClient';

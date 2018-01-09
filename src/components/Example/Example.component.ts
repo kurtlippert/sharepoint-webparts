@@ -12,25 +12,24 @@ export interface ExampleProps {
   context: WebPartContext;
 }
 
-const r = React.createElement;
+const { div, span, p, a } = React.DOM;
 
 const Example = ({ description, test, context }: ExampleProps) =>
-  r('div', { className: styles.example }, [
-    r('div', { className: styles.container }, [
-      r('div', { className: styles.row }, [
-        r('div', { className: styles.column }, [
-          r('span', { className: styles.title, key: 'sp-title' }, 'Welcome to SharePoint!'),
-          r('p', { className: styles.subTitle }, 'Customize SharePoint experiences using Web Parts.'),
-          r('p', { className: styles.description }, escape(description)),
-          r('p', { className: styles.description }, escape(test)),
-          r('p', { className: styles.description }, `Loading from ${escape(context.pageContext.web.title)}`),
-          r('a', { href: 'https://aka.ms/spfx', className: styles.button }, [
-            r('span', { className: styles.label }, 'Learn more'),
-          ]),
-        ]),
-      ]),
-      // WebList()
-    ]),
-  ]);
+  div({ className: styles.example },
+    div({ className: styles.container },
+      div({ className: styles.row },
+        div({ className: styles.column },
+          span({ className: styles.title }, 'Welcome to SharePoint!'),
+          p({ className: styles.subTitle }, 'Customize SharePoint experiences using Web Parts.'),
+          p({ className: styles.description }, escape(description)),
+          p({ className: styles.description }, escape(test)),
+          p({ className: styles.description }, `Loading from ${escape(context.pageContext.web.title)}`),
+          a({ href: 'https://aka.ms/spfx', className: styles.button },
+            span({ className: styles.label }, 'Learn more'),
+          ),
+        ),
+      ),
+    ),
+  );
 
 export default Example;

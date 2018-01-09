@@ -1,13 +1,14 @@
 import * as React from 'react';
-import { createElement as r } from 'react';
 import { LinkProps } from './FilterLink';
+
+const { span, a } = React.DOM;
 
 const Link: React.SFC<LinkProps> = ({ active, onLinkClick, children }) => {
   if (active) {
-    return r('span', {}, children);
+    return span({}, children);
   }
 
-  return r('a', {
+  return a({
     href: '#',
     onClick(e: React.MouseEvent<HTMLElement>): void {
       e.preventDefault();

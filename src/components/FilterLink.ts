@@ -37,15 +37,6 @@ export const mapDispatchToLinkProps = (dispatch: Dispatch<StoreState>, ownProps:
     ),
 });
 
-// interface AppProps extends FilterLinkProps, StateFromProps, DispatchFromProps {}
-
-// export const FilterLink: React.ComponentClass<FilterLinkProps> =
-//   connect<StateFromProps, DispatchFromProps, AppProps>(
-//   mapStateToLinkProps,
-//   mapDispatchToLinkProps
-// )(Link);
-
-/** LinkProps */
 export default connect<StateToLink, DispatchToLink, FilterLinkProps, StoreState>(
   mapStateToLinkProps,
   mapDispatchToLinkProps)(Link);

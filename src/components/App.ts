@@ -4,10 +4,10 @@ import VisibleTodoList from './VisibleTodoList';
 import Footer from './Footer';
 
 const Todos: React.SFC = () =>
-  r('div', {}, [
+  r('div', {},
     r(AddTodo),
     r(VisibleTodoList),
     r(Footer),
-  ]);
+  );
 
 export default Todos;

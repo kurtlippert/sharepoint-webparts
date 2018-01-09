@@ -43,7 +43,8 @@
     "redux-observable-adapter-most": "0.0.2",
     "rxjs": "^5.5.5",
     "typescript-fsa": "^2.5.0",
-    "typestyle": "^1.5.1"
+    "typestyle": "^1.5.1",
+    "uuid": "^3.1.0"
   },
   "devDependencies": {
     "@microsoft/generator-sharepoint": "1.4.0",
@@ -60,6 +61,7 @@
     "@types/redux-mock-store": "0.0.13",
     "@types/requirejs": "^2.1.31",
     "@types/tape": "^4.2.31",
+    "@types/uuid": "^3.4.3",
     "ajv": "~5.2.2",
     "faucet": "0.0.1",
     "gulp": "~3.9.1",

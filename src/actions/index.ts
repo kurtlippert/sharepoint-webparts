@@ -1,5 +1,5 @@
 import { TodoActionType, WebInfoActionType, Filter } from '../types';
-import { v4 } from 'node-uuid';
+import { v4 } from 'uuid';
 // import PageContext from '@microsoft/sp-page-context/lib/PageContext';
 
 // Todo Action Shape
@@ -18,6 +18,7 @@ export interface WebInfoAction {
 }
 
 // Action Creators for the app
+// Add Todo action
 export interface AddTodoActionType {
   type: TodoActionType;
   id: string;
@@ -29,6 +30,7 @@ export const addTodo = (text: string): AddTodoActionType => ({
   text,
 });
 
+// Toggle Todo action
 export interface ToggleTodoActionType {
   type: TodoActionType;
   id: string;
@@ -38,6 +40,7 @@ export const toggleTodo = (id: string): ToggleTodoActionType => ({
   id,
 });
 
+// Filter toggle action
 export interface SetVisibilityActionType {
   type: TodoActionType;
   filter: Filter;
@@ -47,27 +50,10 @@ export const setVisibilityFilter = (filter: Filter): SetVisibilityActionType => 
   filter,
 });
 
-// export interface LoadWebInfoActionType {
-//   type: WebInfoActionType;
-//   url: string;
-// }
-// export const loadWebInfo = (url: string): LoadWebInfoActionType => ({
-//   type: 'LOAD_FROM_URL',
-//   url,
-// });
-
+// Fetch web info action
 export interface FetchWebInfoActionType {
   type: WebInfoActionType;
 }
 export const fetchWebInfo = () => ({
   type: 'FETCH_WEB_INFO',
 } as FetchWebInfoActionType);
-
-// export interface LoadWebInfoActionType {
-//   type: WebInfoActionType;
-//   items: WebInfo[];
-// }
-// export const loadWebItems = (items: WebInfo[]): LoadWebInfoActionType => ({
-//   type: 'LOAD_ITEMS',
-//   items,
-// });
