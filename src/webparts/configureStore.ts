@@ -1,14 +1,14 @@
 import { Reducer, Store, createStore, GenericStoreEnhancer } from 'redux';
-import { StoreState } from '../types';
+import { State } from '../types';
 import { loadState, saveState } from '../localStorage';
 import { throttle } from 'lodash';
 import { todosReducer } from '../reducers';
 
-const configureStore = (store: Store<StoreState>, middlewares?: GenericStoreEnhancer ) => {
-  const preloadedState: StoreState = loadState();
+const configureStore = (store: Store<State>, middlewares?: GenericStoreEnhancer ) => {
+  const preloadedState: State = loadState();
   store =
     createStore(
-      todosReducer as Reducer<StoreState>,
+      todosReducer as Reducer<State>,
       preloadedState,
       middlewares,
     );
@@ -18,6 +18,7 @@ const configureStore = (store: Store<StoreState>, middlewares?: GenericStoreEnha
       todos: store.getState().todos,
       filter: 'SHOW_ALL',
       webInfo: store.getState().webInfo,
+      kaceInfo: store.getState().kaceInfo,
     });
   }, 1000));
 

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { DispatchProp, connect } from 'react-redux';
-import { StoreState } from '../types';
+import { State } from '../types';
 import { addTodo } from '../actions';
 
 const { div, input, button } = React.DOM;
 
-const AddTodo: React.SFC<DispatchProp<StoreState>> = ({ dispatch }) => {
+const AddTodo: React.SFC<DispatchProp<State>> = ({ dispatch }) => {
   let inputElement: HTMLInputElement;
 
   return (

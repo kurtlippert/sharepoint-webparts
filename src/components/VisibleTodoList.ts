@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
-import { Todo, StoreState, Filter } from '../types';
+import { Todo, State, Filter } from '../types';
 import { toggleTodo, ToggleTodoActionType, AddTodoActionType } from '../actions';
 import TodoList from './TodoList';
 
@@ -34,14 +34,14 @@ interface DispatchFromProps {
   onTodoClick: (id: string) => ToggleTodoActionType;
 }
 
-const mapStateToTodoListProps = (store: StoreState) => ({
+const mapStateToTodoListProps = (store: State) => ({
   todoList: getVisibleTodos(
     store.todos,
     store.filter,
   ),
 });
 
-const mapDispatchToTodoListProps = (dispatch: Dispatch<StoreState>) => ({
+const mapDispatchToTodoListProps = (dispatch: Dispatch<State>) => ({
   onTodoClick: (id: string) =>
     dispatch(
       toggleTodo(
@@ -50,7 +50,7 @@ const mapDispatchToTodoListProps = (dispatch: Dispatch<StoreState>) => ({
     ),
 });
 
-export default connect<StateFromProps, DispatchFromProps, void, StoreState>(
+export default connect<StateFromProps, DispatchFromProps, void, State>(
   mapStateToTodoListProps,
   mapDispatchToTodoListProps,
 )(TodoList as React.SFC<TodoListProps>);

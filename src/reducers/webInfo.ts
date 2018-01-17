@@ -1,12 +1,11 @@
-import { WebInfo } from '../types';
-import { WebInfoAction } from '../epics';
+import { WebInfo, Action } from '../types';
 
-const webInfo = (state: WebInfo[] = [], action: WebInfoAction): WebInfo[] => {
+const webInfo = (state: WebInfo[] = [], action: Action): WebInfo[] => {
   switch (action.type) {
     case 'FETCH_WEB_INFO_FULFILLED':
       return [
         ...state,
-        ...action.payload,
+        ...action.payload as WebInfo[],
       ];
     default:
       return state;

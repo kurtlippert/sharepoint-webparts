@@ -1,6 +1,6 @@
 import { TodoActionType, WebInfoActionType, Filter } from '../types';
 import { v4 } from 'uuid';
-// import PageContext from '@microsoft/sp-page-context/lib/PageContext';
+import { KaceInfoActionType } from '../types';
 
 // Todo Action Shape
 export interface TodoAction {
@@ -57,3 +57,11 @@ export interface FetchWebInfoActionType {
 export const fetchWebInfo = () => ({
   type: 'FETCH_WEB_INFO',
 } as FetchWebInfoActionType);
+
+// Fetch kace info action
+export interface FetchKaceInfoActionType {
+  type: KaceInfoActionType;
+}
+export const fetchKaceMachines = () => ({
+  type: 'FETCH_KACE_MACHINES',
+} as FetchKaceInfoActionType);

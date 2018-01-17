@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
-import { Filter, StoreState } from '../types';
+import { Filter, State } from '../types';
 import { setVisibilityFilter, SetVisibilityActionType } from '../actions';
 import Link from './Link';
 
@@ -24,11 +24,11 @@ interface DispatchToLink {
   onLinkClick: () => SetVisibilityActionType;
 }
 
-export const mapStateToLinkProps = (store: StoreState, ownProps: FilterLinkProps) => ({
+export const mapStateToLinkProps = (store: State, ownProps: FilterLinkProps) => ({
   active: store.filter === ownProps.filter,
 });
 
-export const mapDispatchToLinkProps = (dispatch: Dispatch<StoreState>, ownProps: FilterLinkProps) => ({
+export const mapDispatchToLinkProps = (dispatch: Dispatch<State>, ownProps: FilterLinkProps) => ({
   onLinkClick: () =>
     dispatch(
       setVisibilityFilter(
@@ -37,6 +37,6 @@ export const mapDispatchToLinkProps = (dispatch: Dispatch<StoreState>, ownProps:
     ),
 });
 
-export default connect<StateToLink, DispatchToLink, FilterLinkProps, StoreState>(
+export default connect<StateToLink, DispatchToLink, FilterLinkProps, State>(
   mapStateToLinkProps,
   mapDispatchToLinkProps)(Link);

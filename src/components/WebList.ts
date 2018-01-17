@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { listStyle, listItemStyle } from './WebList/WebList.style';
-import { WebInfo, StoreState } from '../types';
+import { WebInfo, State } from '../types';
 import { connect } from 'react-redux';
 
 export interface WebListProps {
@@ -19,10 +19,10 @@ const WebList: React.SFC<WebListProps> = ({ webInfo }) =>
       )),
   );
 
-const mapStateToWebInfoProps = (store: StoreState) => ({
+const mapStateToWebInfoProps = (store: State) => ({
   webInfo: store.webInfo,
 });
 
-export default connect<WebListProps, {}, void, StoreState>(
+export default connect<WebListProps, {}, void, State>(
   mapStateToWebInfoProps,
 )(WebList);
