@@ -14,9 +14,9 @@ const KaceList: React.SFC<KaceInfoProps> = ({ kaceInfo }) =>
     kaceInfo.Machines.map((machineInfo: MachineInfo) =>
     ul({ key: machineInfo.Id },
       li({},
-        div({ className: 'ms-font-l' }, machineInfo.Name ),
-        div({ className: 'ms-font-l' }, machineInfo.Os_name ),
-        div({ className: 'ms-font-l' }, machineInfo.User ),
+        div({ key: machineInfo.Id, className: 'ms-font-l' }, machineInfo.Name ),
+        div({ key: machineInfo.Id, className: 'ms-font-l' }, machineInfo.Os_name ),
+        div({ key: machineInfo.Id, className: 'ms-font-l' }, machineInfo.User ),
       ),
     ),
   ),
