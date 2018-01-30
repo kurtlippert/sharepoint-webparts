@@ -15,6 +15,7 @@ server.use(middlewares);
 server.use(jsonServer.bodyParser)
 server.use((req, res, next) => {
   if (req.method == 'POST' && req.path == '/login') {
+    console.log(req.body);
     if (req.body.userName === process.env.API_USER &&
         req.body.password === process.env.API_PASS) {
       res.setHeader('Access-Control-Expose-Headers', 'x-dell-csrf-token')
@@ -56,6 +57,10 @@ server.use((req, res, next) => {
   }
 })
 
-https.createServer(options, server).listen(3002, function() {
-  console.log("json-server started on port " + 3002);
+server.listen(3001, () => {
+  console.log("http JSON server running");
 })
+
+// https.createServer(options, server).listen(3002, function() {
+//   console.log("json-server started on port " + 3002);
+// })

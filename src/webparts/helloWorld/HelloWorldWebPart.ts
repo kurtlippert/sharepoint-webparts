@@ -18,10 +18,9 @@ import { State, WebInfo } from '../../types';
 import configureStore from '../configureStore';
 import { createEpicMiddleware } from 'redux-observable';
 
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/Rx';
 import { fetchWebInfo, fetchKaceMachines } from '../../actions';
 
-import 'rxjs/add/observable/fromPromise';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
 import rootEpic, { EpicDependencies } from '../../epics';
