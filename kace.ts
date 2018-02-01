@@ -13,7 +13,7 @@ const fetchMachinesUrl = `${domain}/api/inventory/machines`;
 // return the 'set-cookie' header from the response and coerce it to []
 // invalid credentials ought to be caught in the calling statement
 // Note that after setting the cookies, subsequent requests won't need to hit this.
-async function getLoginCookies(userName: string, password: string) {
+async function getLoginCookies(userName: string, password: string): Promise<string[]> {
   const loginOptions = {
     url: loginUrl,
     method: 'POST',
@@ -26,7 +26,7 @@ async function getLoginCookies(userName: string, password: string) {
     },
     json: true,
     resolveWithFullResponse: true,
-  }
+  };
 
   const loginMessage: IncomingMessage = await rp(loginOptions);
   return loginMessage.headers['set-cookie'] as string[] || [];
@@ -34,14 +34,14 @@ async function getLoginCookies(userName: string, password: string) {
 
 // Given the proper login cookies (which contain credentials),
 // attempt to fetch machine information from Kace and return it
-async function getMachinesMessage(loginCookies: string[]) {
+async function getMachinesMessage(loginCookies: string[]): Promise<IncomingMessage> {
   const cookieJar = rp.jar();
   const cookies = loginCookies.map((cookieStr: string) => rp.cookie(cookieStr) as Cookie);
   cookies.forEach((cookie: Cookie) => cookieJar.setCookie(cookie, fetchMachinesUrl));
 
   const tokenString =
     cookieJar.getCookieString(fetchMachinesUrl).split('; ')
-      .find(cookieString => cookieString.startsWith('KACE_CSRF_TOKEN'))
+      .find(cookieString => cookieString.startsWith('KACE_CSRF_TOKEN'));
   const token = tokenString ? tokenString.split('=')[1] : '';
 
   const getMachinesOptions = {
@@ -60,16 +60,16 @@ async function getMachinesMessage(loginCookies: string[]) {
 // helper method that formats the appropriate machine response to send to the client,
 // then sends it.
 const sendMachinesMessage = (machinesMessage: IncomingMessage, loginCookies: string[], res: express.Response) => {
-  res.setHeader('Set-Cookie', [ ...loginCookies ])
-  res.send(machinesMessage)
-}
+  res.setHeader('Set-Cookie', [ ...loginCookies ]);
+  res.send(machinesMessage);
+};
 
 // helper method that just does the whole login -> get machines thing
-function loginThenGetMachines(userName: string, password: string, res: express.Response) {
+function loginThenGetMachines(userName: string, password: string, res: express.Response): void {
   getLoginCookies(userName, password)
     .then((loginCookies: any) =>
       getMachinesMessage(loginCookies)
-        .then((getMachinesMessage) => sendMachinesMessage(getMachinesMessage, loginCookies, res))
+        .then((machinesMessage) => sendMachinesMessage(machinesMessage, loginCookies, res))
         .catch(err => res.send(err.response)))
     .catch(err => res.send(err.error));
 }
@@ -109,7 +109,7 @@ app.get('/machines', (req, res) => {
 
   // we want array form because the request-promise library cookieparser expects that form
   // also, array -> object would require knowing the shape of the cookies. This solution is agnostic
-  const kaceLoginCookies = Object.keys(req.cookies).map(key => `${key}=${req.cookies[key]}`)
+  const kaceLoginCookies = Object.keys(req.cookies).map(key => `${key}=${req.cookies[key]}`);
 
   // we want to store cookies on client side (for subsequent requests, other than machines)
   // passing cookies back and forth between server and client requires some balancing
@@ -118,10 +118,11 @@ app.get('/machines', (req, res) => {
         .catch(err => {
           return err.response && JSON.parse(err.response.body)['errorDescription'] !== 'Expired token'
             ? res.send(err.response)
-            : loginThenGetMachines(userName, password, res) })
+            : loginThenGetMachines(userName, password, res); })
         .then((machinesResponse) =>
           sendMachinesMessage(machinesResponse as IncomingMessage, kaceLoginCookies, res))
-    : loginThenGetMachines(userName, password, res)
+    : loginThenGetMachines(userName, password, res);
 });
 
+// tslint:disable-next-line:no-console
 app.listen(3003, () => console.log('listening on port 3003!'));
