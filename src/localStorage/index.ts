@@ -1,15 +1,15 @@
-import { State } from '../types';
-import { initialKaceInfo } from '../reducers/kaceInfo';
+import { State } from '../Model';
+import { initialKaceInfo } from '../KaceInfo/Model';
 
 export const loadState = () => {
   try {
     const serializedState = localStorage.getItem('state');
     if (serializedState === null) {
-      return { todos: [], filter: 'SHOW_ALL', webInfo: [], kaceInfo: initialKaceInfo } as State;
+      return { kaceInfo: initialKaceInfo } as State;
     }
     return JSON.parse(serializedState) as State;
   } catch (err) {
-    return { todos: [], filter: 'SHOW_ALL', webInfo: [], kaceInfo: initialKaceInfo } as State;
+    return { kaceInfo: initialKaceInfo } as State;
   }
 };
 

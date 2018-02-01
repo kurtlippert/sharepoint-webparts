@@ -1,5 +1,9 @@
+
+// react
 import { createElement as r } from 'react';
 import * as ReactDom from 'react-dom';
+
+// spfx
 import {
   Version,
 } from '@microsoft/sp-core-library';
@@ -8,57 +12,29 @@ import {
   WebPartContext,
 } from '@microsoft/sp-webpart-base';
 
-import { Store, applyMiddleware } from 'redux';
-import { Provider } from 'react-redux';
+// App Component
+import App from '../../View';
 
-import WebList from '../../components/WebList';
-import KaceList from '../../components/KaceList';
-import Todos from '../../components/App';
-import { State, WebInfo } from '../../types';
+// redux
+import { fetchKaceMachines } from '../../KaceInfo/Actions';
 import configureStore from '../configureStore';
+import { loadState } from '../../localStorage';
+import { Provider } from 'react-redux';
 import { createEpicMiddleware } from 'redux-observable';
+import { Store, applyMiddleware } from 'redux';
+import { initialKaceInfo } from '../../KaceInfo/Model';
+import { State } from '../../Model';
 
-import { Observable } from 'rxjs/Rx';
-import { fetchWebInfo, fetchKaceMachines } from '../../actions';
+// redux-observables
+import { rootEpic, EpicDependencies } from '../../Update';
 
+// rxjs
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/mergeMap';
-import rootEpic, { EpicDependencies } from '../../epics';
-import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
-import { EnvironmentType, Environment } from '@microsoft/sp-core-library';
-import { loadState } from '../../localStorage';
 import { ajax } from 'rxjs/observable/dom/ajax';
-import { initialKaceInfo } from '../../reducers/kaceInfo';
+
+// misc
 import deepEqual = require('deep-equal');
-
-interface SpPayload {
-  value: WebInfo[];
-}
-
-const mockData: WebInfo[] = [
-  { Id: '1', Title: 'Mock List' },
-  { Id: '2', Title: 'Mock List 2' },
-  { Id: '3', Title: 'Mock List 3' },
-];
-
-const getMockData =
-  new Promise<WebInfo[]>((resolve) => resolve(mockData));
-
-export const getWebInfo = (webPartContext: WebPartContext, url: string) => {
-  switch (Environment.type) {
-    case EnvironmentType.Local:
-      return getMockData;
-    case EnvironmentType.SharePoint:
-    case EnvironmentType.ClassicSharePoint:
-      return (
-        webPartContext.spHttpClient
-            .get(webPartContext.pageContext.web.absoluteUrl + url, SPHttpClient.configurations.v1)
-            .then((response: SPHttpClientResponse): Promise<WebInfo[]> => response.json().then((data: SpPayload) => data.value))
-      );
-    default:
-      return getMockData;
-  }
-};
 
 export default class KaceDashboardWebPart extends BaseClientSideWebPart<{}> {
   // Define redux store
@@ -74,9 +50,6 @@ export default class KaceDashboardWebPart extends BaseClientSideWebPart<{}> {
 
     const epicMiddleware = createEpicMiddleware(rootEpic, {
       dependencies: {
-        getWebInfo: (url: string) =>
-          Observable.fromPromise(
-            getWebInfo(this.context, url)),
         ajax,
       } as EpicDependencies,
     });
@@ -91,11 +64,7 @@ export default class KaceDashboardWebPart extends BaseClientSideWebPart<{}> {
 
     const root =
       r(Provider, { store: this.store },
-        r('div', {},
-          r(Todos),
-          r(WebList),
-          r(KaceList),
-        ),
+        r(App),
       );
 
     ReactDom.render(root, this.domElement);
@@ -104,14 +73,6 @@ export default class KaceDashboardWebPart extends BaseClientSideWebPart<{}> {
   protected onInit(): Promise<void> {
     // subscribe our store to the render function
     this.store.subscribe(this.render);
-
-    // immediately load our weblist on init
-    // unless we already have something in local storage
-    if (loadState().webInfo.length === 0) {
-      this.store.dispatch(
-        fetchWebInfo(),
-      );
-    }
 
     if (deepEqual(loadState().kaceInfo, initialKaceInfo)) {
       this.store.dispatch(

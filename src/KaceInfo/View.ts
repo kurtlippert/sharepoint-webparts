@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { KaceInfo, MachineInfo, State } from '../types';
 import { connect } from 'react-redux';
+import { KaceInfo, MachineInfo } from './Model';
+import { State } from '../Model';
 
 export interface KaceInfoProps {
   kaceInfo: KaceInfo;
@@ -8,15 +9,15 @@ export interface KaceInfoProps {
 
 const { div, ul, li } = React.DOM;
 
-const KaceList: React.SFC<KaceInfoProps> = ({ kaceInfo }) =>
+const KaceInfoView: React.SFC<KaceInfoProps> = ({ kaceInfo }) =>
   div({},
-    kaceInfo.Machines === [] ? 'No Machines Returned' :
+    kaceInfo.Machines.length === 0 ? 'No Machines Returned' :
     kaceInfo.Machines.map((machineInfo: MachineInfo) =>
     ul({ key: machineInfo.Id },
       li({},
-        div({ key: machineInfo.Id, className: 'ms-font-l' }, machineInfo.Name ),
-        div({ key: machineInfo.Id, className: 'ms-font-l' }, machineInfo.Os_name ),
-        div({ key: machineInfo.Id, className: 'ms-font-l' }, machineInfo.User ),
+        div({ className: 'ms-font-l' }, machineInfo.Name ),
+        div({ className: 'ms-font-l' }, machineInfo.Os_name ),
+        div({ className: 'ms-font-l' }, machineInfo.User ),
       ),
     ),
   ),
@@ -28,4 +29,4 @@ const mapStateToKaceInfoProps = (state: State) => ({
 
 export default connect<KaceInfoProps, {}, void, State>(
   mapStateToKaceInfoProps,
-)(KaceList);
+)(KaceInfoView);
