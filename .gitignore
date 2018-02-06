@@ -11,8 +11,8 @@ node_modules
 
 # Build generated files
 dist
-lib
 solution
+lib
 temp
 *.sppkg
 
@@ -36,3 +36,4 @@ obj
 
 # Self-Signed SSL certs
 ssl
+.env
