@@ -1,19 +1,18 @@
-import { KaceInfo, initialKaceInfo } from './Model';
+import { KaceInfo } from './Model';
 
-export type KaceInfoActionType =
-  | 'FETCH_MACHINES'
-  | 'FETCH_MACHINES_FULFILLED'
-  | 'FETCH_ACCOUNTS'
-  | 'FETCH_ACCOUNTS_FULFILLED';
+export interface KaceInfoActionFetch {
+  type: 'FETCH_MACHINES' | 'FETCH_ACCOUNTS';
+}
 
-export interface KaceInfoAction {
-  type: KaceInfoActionType;
+export interface KaceInfoActionFetchFulfilled {
+  type: 'FETCH_MACHINES_FULFILLED' | 'FETCH_ACCOUNTS_FULFILLED';
   payload: KaceInfo;
 }
 
+export type KaceInfoAction = KaceInfoActionFetch | KaceInfoActionFetchFulfilled;
+
 export const fetchKaceMachines = (): KaceInfoAction => ({
   type: 'FETCH_MACHINES',
-  payload: initialKaceInfo,
 });
 
 export const fetchKaceMachinesFulfilled = (payload: KaceInfo): KaceInfoAction => ({

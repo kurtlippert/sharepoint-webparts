@@ -1,15 +1,12 @@
 import * as test from 'tape';
 
 import { rootEpic } from '../../../Update';
-// import { ActionsObservable, createEpicMiddleware } from 'redux-observable';
 import { ActionsObservable } from 'redux-observable';
 import 'rxjs/add/operator/toArray';
-import { Observable } from 'rxjs/Rx';
-import { AjaxCreationMethod } from 'rxjs/observable/dom/AjaxObservable';
+import 'rxjs/add/observable/of';
 import { KaceInfoAction } from '../../../KaceInfo/Actions';
-import { initialKaceInfo, KaceInfo } from '../../../KaceInfo/Model';
-// import configureMockStore from 'redux-mock-store';
-const nock = require('nock');
+import { KaceInfo } from '../../../KaceInfo/Model';
+import { Observable } from 'rxjs/Observable';
 
 type Test = test.Test;
 
@@ -31,38 +28,13 @@ test('fetch kace machine info epic', (t: Test): void => {
     ],
   } as KaceInfo;
 
-  const action$ = ActionsObservable.of({
-    type: 'FETCH_MACHINES',
-    payload: initialKaceInfo } as KaceInfoAction);
+  const action$ = ActionsObservable.of({ type: 'FETCH_MACHINES' } as KaceInfoAction);
   const store: any = null; // not needed for this epic
   const dependencies = {
-    getWebInfo: (_: string) => Observable.of(mockResponse),
-    ajax: {} as AjaxCreationMethod,
+    getJSON: (_: string) => Observable.of({ response: mockResponse }),
   };
 
-  nock('http://kbox')
-    .post('/ams/shared/api/security/login', {
-      userName: process.env.API_USER,
-      password: process.env.API_PASS,
-    })
-    .reply(200, '', {
-      'x-dell-csrf-token': 'test-token',
-    });
-
-  nock('http://kbox', {
-      reqheaders: {
-        'x-dell-csrf-token': 'test-token',
-      },
-    })
-    .get('/api/inventory/machines')
-    .reply(200, {
-      machines: [
-        'machine1',
-        'machine2',
-      ],
-    });
-
-  rootEpic(action$, store, dependencies )
+  rootEpic(action$, store, dependencies)
     .toArray()
     .subscribe((actions) => {
       t.deepEqual(actions, [{
@@ -70,8 +42,6 @@ test('fetch kace machine info epic', (t: Test): void => {
         payload: mockResponse,
       }]);
     });
-
-  nock.cleanAll();
 
   t.end();
 });

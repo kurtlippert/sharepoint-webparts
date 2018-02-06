@@ -1,4 +1,3 @@
-
 // react
 import { createElement as r } from 'react';
 import * as ReactDom from 'react-dom';
@@ -29,8 +28,6 @@ import { State } from '../../Model';
 import { rootEpic, EpicDependencies } from '../../Update';
 
 // rxjs
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/mergeMap';
 import { ajax } from 'rxjs/observable/dom/ajax';
 
 // misc
@@ -50,7 +47,7 @@ export default class KaceDashboardWebPart extends BaseClientSideWebPart<{}> {
 
     const epicMiddleware = createEpicMiddleware(rootEpic, {
       dependencies: {
-        ajax,
+        getJSON: ajax.getJSON,
       } as EpicDependencies,
     });
 
