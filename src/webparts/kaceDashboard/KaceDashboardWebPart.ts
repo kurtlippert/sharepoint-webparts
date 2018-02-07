@@ -15,13 +15,13 @@ import {
 import App from '../../View';
 
 // redux
-import { fetchKaceMachines } from '../../KaceInfo/Actions';
+import { fetchKaceTickets } from '../../KaceInfo/Actions';
 import configureStore from '../configureStore';
-import { loadState } from '../../localStorage';
+// import { loadState } from '../../localStorage';
 import { Provider } from 'react-redux';
 import { createEpicMiddleware } from 'redux-observable';
 import { Store, applyMiddleware } from 'redux';
-import { initialKaceInfo } from '../../KaceInfo/Model';
+// import { initialKaceInfo } from '../../KaceInfo/Model';
 import { State } from '../../Model';
 
 // redux-observables
@@ -31,7 +31,7 @@ import { rootEpic, EpicDependencies } from '../../Update';
 import { ajax } from 'rxjs/observable/dom/ajax';
 
 // misc
-import deepEqual = require('deep-equal');
+// import deepEqual = require('deep-equal');
 
 export default class KaceDashboardWebPart extends BaseClientSideWebPart<{}> {
   // Define redux store
@@ -71,11 +71,18 @@ export default class KaceDashboardWebPart extends BaseClientSideWebPart<{}> {
     // subscribe our store to the render function
     this.store.subscribe(this.render);
 
-    if (deepEqual(loadState().kaceInfo, initialKaceInfo)) {
-      this.store.dispatch(
-        fetchKaceMachines(),
-      );
-    }
+    // if (deepEqual(loadState().kaceInfo, initialKaceInfo)) {
+    //   // this.store.dispatch(
+    //   //   fetchKaceMachines(),
+    //   // );
+    //   this.store.dispatch(
+    //     fetchKaceTickets(),
+    //   );
+    // }
+
+    this.store.dispatch(
+      fetchKaceTickets(),
+    );
 
     return super.onInit();
   }
