@@ -31,7 +31,7 @@ test('fetch kace machine info epic', (t: Test): void => {
   const action$ = ActionsObservable.of({ type: 'FETCH_MACHINES' } as KaceInfoAction);
   const store: any = null; // not needed for this epic
   const dependencies = {
-    getJSON: (_: string) => Observable.of({ response: mockResponse }),
+    getJSON: (_: string) => Observable.of(mockResponse),
   };
 
   rootEpic(action$, store, dependencies)
